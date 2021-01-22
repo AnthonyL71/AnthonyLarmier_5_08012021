@@ -1,18 +1,33 @@
-
-// Création du texte dans la modal a l'appuie du bouton "Me connaitre"
-let nameours;
-let couleursours = {};
-function ouvremodal(id) {
-    for (let d = 0; d < tableauours.length; d++) {
-        if (d == id) {
-           nameours = tableauours[d].name; 
-           photoours = tableauours[d].imageUrl;
-           descrours = tableauours[d].description;
-           priceours = tableauours[d].price;
-           couleursours = tableauours[d].colors;
+// Fonction pour récuperer la liste des Ours de l'api
+let listOurs = {};
+function FunctionTableOurs() {
+    var requeste = new XMLHttpRequest();
+    requeste.onreadystatechange = function() {
+        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+             response = JSON.parse(this.responseText);
+            requeste.onload = function() {
+                listOurs = response;
+            }
         }
     }
-    sessionStorage.setItem("couleur", id);
+    requeste.open("GET", "https://oc-devweb-p5-api.herokuapp.com/api/teddies");
+    requeste.send();
+    };
+
+// Création du texte dans la modal a l'appuie du bouton "Me connaitre"
+let couleursours = {};
+function ouvremodal(id) {
+FunctionTableOurs();
+setTimeout(function() {
+    for (let d = 0; d < listOurs.length; d++) {
+        if (d == id) {
+           nameours = listOurs[d].name; 
+           photoours = listOurs[d].imageUrl;
+           descrours = listOurs[d].description;
+           priceours = listOurs[d].price;
+           couleursours = listOurs[d].colors;
+        }
+    }
     $('.modal-header').empty();
     $('.modal-body').empty();
 
@@ -63,6 +78,7 @@ function ouvremodal(id) {
     }
     text_body += '</div>';
     crea_body.innerHTML += text_body;
+}, 300);
 }
 
 
@@ -71,37 +87,36 @@ function ouvremodal(id) {
 // Création de la requète pour télécharger je json en tableau
 // Et ensuite l'afficher sur la page d'accueil du site
 var request = new XMLHttpRequest();
-let tableauours = {};
-let elt50;
+let tableOurs = {};
 request.onreadystatechange = function() {
     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
         var response = JSON.parse(this.responseText);
         request.onload = function() {
-         tableauours = response;
+         tableOurs = response;
             // console.log(superHeroes[2]);
-            for (let i = 0; i < tableauours.length; i++) {
+            for (let i = 0; i < tableOurs.length; i++) {
             //    console.log(i);
-                let crea_ficheprod = document.getElementById('les-ours');
-                let ficheproduit = '<figure class="border col-5 border-light rounded py-4 px-4 w-25 margin-center mt-5 text-center">';
-                ficheproduit += '<figcaption><h1 class="name mb-2">' + tableauours[i].name + '</h1><img class="redimension" src="' + tableauours[i].imageUrl + '"/></figcaption>';
-                ficheproduit += '<button type="button" onclick="ouvremodal(' + i + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-description' + i + '" data-toggle="modal" data-target="#modal-description' + i + '">Me connaitre</button>';
-                crea_ficheprod.innerHTML += ficheproduit;
-                    crea_modal = document.getElementById('creationmodal');    // On récupère l'élément sur lequel on veut détecter le clic
-                    let crea_modaltext = '<div class="modal fade" id="modal-description' + i + '" tabindex="-1" role="dialog" aria-hidden="true">';
-                    crea_modaltext += '<div class="modal-dialog" role="document">';
-                    crea_modaltext += '<div class="modal-content">';
-                    crea_modaltext += '<div id="modal-header' + i + '" class="modal-header">';
-                    crea_modaltext += '</div>';
-                    crea_modaltext += '<div id="modal-body' + i + '" class="modal-body">';
-                    crea_modaltext += '</div>';
-                    crea_modaltext += '<div class="modal-footer">';
-                    crea_modaltext += '<button type="button" id="modal-close" onclick="fermemodal(' + i + ')"; class="btn btn-secondary" data-dismiss="modal">Fermer</button>';
-                    crea_modaltext += '<button type="button" class="btn btn-primary">Enregistrer</button>';
-                    crea_modaltext += '</div>';
-                    crea_modaltext += '</div>';
-                    crea_modaltext += '</div>';
-                    crea_modaltext += '</div>';
-                    crea_modal.innerHTML += crea_modaltext;
+                let initProd = document.getElementById('les-ours');
+                let product = '<figure class="border col-5 border-light rounded py-4 px-4 w-25 margin-center mt-5 text-center">';
+                product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + '</h1><img class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
+                product += '<button type="button" onclick="ouvremodal(' + i + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-description' + i + '" data-toggle="modal" data-target="#modal-description' + i + '">Me connaitre</button>';
+                initProd.innerHTML += product;
+                    initModal = document.getElementById('creationmodal');    // On récupère l'élément sur lequel on veut détecter le clic
+                    let initModalText = '<div class="modal fade" id="modal-description' + i + '" tabindex="-1" role="dialog" aria-hidden="true">';
+                    initModalText += '<div class="modal-dialog" role="document">';
+                    initModalText += '<div class="modal-content">';
+                    initModalText += '<div id="modal-header' + i + '" class="modal-header">';
+                    initModalText += '</div>';
+                    initModalText += '<div id="modal-body' + i + '" class="modal-body">';
+                    initModalText += '</div>';
+                    initModalText += '<div class="modal-footer">';
+                    initModalText += '<button type="button" id="modal-close" onclick="fermemodal(' + i + ')"; class="btn btn-secondary" data-dismiss="modal">Fermer</button>';
+                    initModalText += '<button type="button" class="btn btn-primary">Enregistrer</button>';
+                    initModalText += '</div>';
+                    initModalText += '</div>';
+                    initModalText += '</div>';
+                    initModalText += '</div>';
+                    initModal.innerHTML += initModalText;
                 };
             
         }
@@ -109,5 +124,3 @@ request.onreadystatechange = function() {
 };
 request.open("GET", "https://oc-devweb-p5-api.herokuapp.com/api/teddies");
 request.send();
-//
-
