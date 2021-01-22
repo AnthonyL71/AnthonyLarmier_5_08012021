@@ -2,7 +2,6 @@ h1, h2, h3, h4, h5, h6, p {
     font-family: 'Lato', sans-serif;
 }
 
-
 h1 {
     font-weight:800;
 }
@@ -29,6 +28,75 @@ h1 {
 
 .modal-footer, .modal-body, .modal-header {
     background-color: #343a40!important;
+}
+
+.carre-palebrown { 
+    width:40px; 
+    height:40px; 
+    background-color: #755847; 
+    margin:5px; 
+}
+.carre-darkbrown { 
+    width:40px; 
+    height:40px; 
+    background-color: #654321; 
+    margin:5px; 
+}
+.carre-white { 
+    width:40px; 
+    height:40px;
+    background-color: #FFFFFF;
+     margin:5px; 
+    }
+.carre-tan { 
+    width:40px; 
+    height:40px; 
+    background-color: #D2B48C; 
+    margin:5px; 
+}
+.carre-chocolate { 
+    width:40px; 
+    height:40px; 
+    background-color: #D2691E; 
+    margin:5px; 
+}
+.carre-black { 
+    width:40px; 
+    height:40px; 
+    background-color: #000000; 
+    margin:5px; 
+}
+.carre-brown { 
+    width:40px; 
+    height:40px; 
+    background-color: #A52A2A; 
+    margin:5px; 
+}
+.carre-blue { 
+    width:40px; 
+    height:40px; 
+    background-color: #0000FF; 
+    margin:5px; 
+}
+.carre-pink { 
+    width:40px; 
+    height:40px; 
+    background-color: #FFC0CB; 
+    margin:5px; 
+}
+.carre-beige { 
+    width:40px; 
+    height:40px; 
+    background-color: #F5F5FC; 
+    margin:5px;
+}
+.panel-couleurs:hover {
+    cursor: pointer;
+}
+.carre-white:focus {
+    border-width:2px; 
+    border-style:solid;
+    border-color:blue;
 }
 
 .text-footer {

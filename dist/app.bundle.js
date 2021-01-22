@@ -1,6 +1,7 @@
 
 // Création du texte dans la modal a l'appuie du bouton "Me connaitre"
 let nameours;
+let couleursours = {};
 function ouvremodal(id) {
     for (let d = 0; d < tableauours.length; d++) {
         if (d == id) {
@@ -8,6 +9,7 @@ function ouvremodal(id) {
            photoours = tableauours[d].imageUrl;
            descrours = tableauours[d].description;
            priceours = tableauours[d].price;
+           couleursours = tableauours[d].colors;
         }
     }
     sessionStorage.setItem("couleur", id);
@@ -21,6 +23,45 @@ function ouvremodal(id) {
     let text_body = '<img class="redimension" src="' + photoours + '"/>';
     text_body += '<p class="mx-auto col-12 text-center"> ' + descrours + ' </p>';
     text_body += '<p class="text-right">' + priceours + ' €</p>';
+    text_body += '<p class="ml-4"> Autres couleurs disponible : </p>';
+    text_body += '<div class="ml-4 panel-couleurs row">';
+    for (let d = 0; d < couleursours.length; d++) {
+        switch (couleursours[d]) {
+            case 'Tan':
+                text_body += '<div class="carre-tan"></div>';
+                break;
+            case "Chocolate":
+                text_body += '<div class="carre-chocolate"></div>';
+                break;
+            case "Black":
+                text_body += '<div class="carre-black"></div>';
+                break;
+            case "White":
+                text_body += '<p class="carre-white"></p>';
+                break;
+            case "Pale brown":
+                text_body += '<div class="carre-palebrown"></div>';
+                break;
+            case "Dark brown":
+                text_body += '<div class="carre-darkbrown"></div>';
+                break;
+            case "Brown":
+                text_body += '<div class="carre-brown"></div>';
+                break;
+            case "Blue":
+                text_body += '<div class="carre-blue"></div>';
+                break;
+            case "Pink":
+                text_body += '<div class="carre-pink"></div>';
+                break;
+            case "Beige":
+                text_body += '<div class="carre-beige"></div>';
+                break;
+            default:
+                text_body += '<p>Aucunes couleurs disponibles</p>';
+        }
+    }
+    text_body += '</div>';
     crea_body.innerHTML += text_body;
 }
 
