@@ -5,10 +5,18 @@ h1, h2, h3, h4, h5, h6, p {
 h1 {
     font-weight:800;
 }
-.sous-container-2 {
+.text-title {
+    -webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue);
+}
+.container-1 {
+    width:100%;
+    padding-left:0px!important;
+}
+.container-fluid {
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    padding-right:0!important;
 }
 .margin-center {
     margin-left: auto;
@@ -30,73 +38,68 @@ h1 {
     background-color: #343a40!important;
 }
 
-.carre-palebrown { 
+.square-palebrown { 
     width:40px; 
     height:40px; 
     background-color: #755847; 
     margin:5px; 
 }
-.carre-darkbrown { 
+.square-darkbrown { 
     width:40px; 
     height:40px; 
     background-color: #654321; 
     margin:5px; 
 }
-.carre-white { 
+.square-white { 
     width:40px; 
     height:40px;
     background-color: #FFFFFF;
      margin:5px; 
     }
-.carre-tan { 
+.square-tan { 
     width:40px; 
     height:40px; 
     background-color: #D2B48C; 
     margin:5px; 
 }
-.carre-chocolate { 
+.square-chocolate { 
     width:40px; 
     height:40px; 
     background-color: #D2691E; 
     margin:5px; 
 }
-.carre-black { 
+.square-black { 
     width:40px; 
     height:40px; 
     background-color: #000000; 
     margin:5px; 
 }
-.carre-brown { 
+.square-brown { 
     width:40px; 
     height:40px; 
     background-color: #A52A2A; 
     margin:5px; 
 }
-.carre-blue { 
+.square-blue { 
     width:40px; 
     height:40px; 
     background-color: #0000FF; 
     margin:5px; 
 }
-.carre-pink { 
+.square-pink { 
     width:40px; 
     height:40px; 
     background-color: #FFC0CB; 
     margin:5px; 
 }
-.carre-beige { 
+.square-beige { 
     width:40px; 
     height:40px; 
     background-color: #F5F5FC; 
     margin:5px;
 }
-.panel-couleurs:hover {
+.panelcouleurs:hover {
     cursor: pointer;
-}
-.carre-white:focus {
-    border-width:2px; 
-    border-style:solid;
-    border-color:blue;
 }
 
 .text-footer {
