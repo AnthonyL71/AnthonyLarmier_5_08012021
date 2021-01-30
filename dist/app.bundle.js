@@ -126,8 +126,8 @@ function forEachKey() {
   }
 forEachKey();
 function basket() {
-    var monobjet_json = sessionStorage.getItem();
-    var monobjet = JSON.parse(monobjet_json);
+    //var monobjet_json = sessionStorage.getItem();
+    //var monobjet = JSON.parse(monobjet_json);
     // Affichage dans la console
     console.log(monobjet);
     initModal = document.getElementById('basketmodal');
