@@ -4,17 +4,19 @@ function colors() {
     var i = 0;
     for(var i = 0; i < imgs.length;i++){
         imgs[i].addEventListener('click', function(y){
-        if(this.style.borderColor != "blue"){
-            this.style.border = "2.5px blue solid";
+            if(this.style.borderColor != "blue"){
+                this.style.border = "2.5px blue solid";
             }else{
                 this.style.border = "none";
             }
         }, false);
     }
 }
-
+let basketId;
+let basketName;
+let basketPrice;
 // Création du texte dans la modal a l'appuie du bouton "Me connaitre"
-function ouvremodal(id) {
+function openmodal(id) {
 // Fonction pour récuperer la liste des Ours de l'api
     let listOurs = {};
     function FunctionTableOurs() {
@@ -36,12 +38,22 @@ function ouvremodal(id) {
         for (let d = 0; d < listOurs.length; d++) {
             // On vérifie que ce soit le meme id que dans la liste
             if (d == id) {
+                basketId = listOurs[d]._id;
+                basketName = listOurs[d].name;
+                basketPrice = listOurs[d].price;
                 colorsOurs = listOurs[d].colors;
-                $('.modal-header').empty();
-                $('.modal-body').empty();
+                document.getElementById('modal-header' + id + '').innerHTML = "";
+                document.getElementById('modal-body' + id + '').innerHTML = "";
+                document.getElementById('modal-footer' + id + '').innerHTML = "";
                 let creaHeader = document.getElementById('modal-header' + id + '');
-                let textHeader = '<h3 class="modal-title mx-auto col-12 text-center"> ' + listOurs[d].name + ' </h3>';
+                let textHeader = '<h3 class="modal-title mx-auto col-12 text-center"> ' + listOurs[d].name + '</h3>';
                 creaHeader.innerHTML += textHeader;
+                let creaFooter = document.getElementById('modal-footer' + id + '');
+                textFooter = '<div class="mx-auto">';
+                textFooter += '<button type="button" id="modal-close" class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
+                textFooter += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + id + '" data-toggle="modal" data-target="#basketmodal' + id + '" onclick="addbasket(' + id + ')" class="btn btn-primary">Acheter</button>';
+                textFooter += '</div>';
+                creaFooter.innerHTML += textFooter;
                 let creaBody = document.getElementById('modal-body' + id + '');
                 let textBody = '<img class="redimension" src="' + listOurs[d].imageUrl + '"/>';
                 textBody += '<p class="mx-auto col-12 text-center"> ' + listOurs[d].description + ' </p>';
@@ -92,11 +104,51 @@ function ouvremodal(id) {
     // On lance la fonction colors() pour que a la séléction de la couleur elle soit encadré
     colors();
     }, 1000);
-
 }
 
+function addbasket(id) {
+    var monobjet  = {
+        id : id,
+        name : basketName,
+        price : basketPrice
+      };
+      var monobjet_json = JSON.stringify(monobjet);
+    sessionStorage.setItem(basketId,monobjet_json);
+    delete(basketName);
+    delete(basketPrice);
+    delete(basketId);
+}
 
-
+function forEachKey() {
+    for (var i = 0; i < sessionStorage.length; i++) {
+      console.log(sessionStorage.key(i));
+    }
+  }
+forEachKey();
+function basket() {
+    var monobjet_json = sessionStorage.getItem();
+    var monobjet = JSON.parse(monobjet_json);
+    // Affichage dans la console
+    console.log(monobjet);
+    initModal = document.getElementById('basketmodal');
+    let initModalText = '<div class="modal fade" id="basketmodal" tabindex="-1" role="dialog" aria-hidden="true">';
+    initModalText += '<div class="modal-dialog" role="document">';
+    initModalText += '<div class="modal-content">';
+    initModalText += '<div id="modal-header" class="modal-header">';
+    initModalText += '</div>';
+    initModalText += '<div id="modal-body" class="modal-body">';
+    initModalText += '<h3> ' + id + ' et nom ' + name + '</h3>';
+    initModalText += '<h3> </h3>';    
+    initModalText += '</div>';
+    initModalText += '<div class="modal-footer">';
+    initModalText += '<div class="mx-auto">';
+    initModalText += '</div>';
+    initModalText += '</div>';
+    initModalText += '</div>';
+    initModalText += '</div>';
+    initModalText += '</div>';
+    initModal.innerHTML += initModalText;
+}
 
 // Création de la requète pour télécharger je json en tableau
 // Et ensuite l'afficher sur la page d'accueil du site
@@ -113,22 +165,18 @@ request.onreadystatechange = function() {
                 let initProd = document.getElementById('les-ours');
                 let product = '<figure class="border col-lg-5 col-12 border-light rounded py-4 px-4 margin-center mt-5 text-center">';
                 product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + '</h1><img class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
-                product += '<button type="button" onclick="ouvremodal(' + i + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-description' + i + '" data-toggle="modal" data-target="#modal-description' + i + '">Me connaitre</button>';
+                product += '<button type="button" onclick="openmodal(' + i + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-list' + i + '" data-toggle="modal" data-target="#modal-list' + i + '">Me connaitre</button>';
                 initProd.innerHTML += product;
                 // On prépare la modal au futur clique de l'utilisateur
                 initModal = document.getElementById('creationmodal');
-                let initModalText = '<div class="modal fade" id="modal-description' + i + '" tabindex="-1" role="dialog" aria-hidden="true">';
+                let initModalText = '<div class="modal fade" id="modal-list' + i + '" tabindex="-1" role="dialog" aria-hidden="true">';
                 initModalText += '<div class="modal-dialog" role="document">';
                 initModalText += '<div class="modal-content">';
                 initModalText += '<div id="modal-header' + i + '" class="modal-header">';
                 initModalText += '</div>';
                 initModalText += '<div id="modal-body' + i + '" class="modal-body">';
                 initModalText += '</div>';
-                initModalText += '<div class="modal-footer">';
-                initModalText += '<div class="mx-auto">';
-                initModalText += '<button type="button" id="modal-close" class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
-                initModalText += '<button type="button" class="btn btn-primary">Acheter</button>';
-                initModalText += '</div>';
+                initModalText += '<div id="modal-footer' + i + '" class="modal-footer">';
                 initModalText += '</div>';
                 initModalText += '</div>';
                 initModalText += '</div>';
@@ -141,3 +189,4 @@ request.onreadystatechange = function() {
 };
 request.open("GET", "https://oc-devweb-p5-api.herokuapp.com/api/teddies");
 request.send();
+
