@@ -104,7 +104,7 @@ function colors() {
 // }
 
 function addBasket(id) {
-                 document.getElementById('modal-body').innerHTML = "";
+
     document.location.reload();
     for (let i = 0; i < tableOurs.length; i++) {
         if (id == i) {
