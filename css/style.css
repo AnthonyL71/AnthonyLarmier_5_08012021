@@ -39,62 +39,62 @@ background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue
 }
 
 .square-palebrown { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #755847; 
     margin:5px; 
 }
 .square-darkbrown { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #654321; 
     margin:5px; 
 }
 .square-white { 
-    width:40px; 
-    height:40px;
+    width:40px!important; 
+    height:40px!important; 
     background-color: #FFFFFF;
      margin:5px; 
     }
 .square-tan { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #D2B48C; 
     margin:5px; 
 }
 .square-chocolate { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #D2691E; 
     margin:5px; 
 }
 .square-black { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #000000; 
     margin:5px; 
 }
 .square-brown { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #A52A2A; 
     margin:5px; 
 }
 .square-blue { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #0000FF; 
     margin:5px; 
 }
 .square-pink { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #FFC0CB; 
     margin:5px; 
 }
 .square-beige { 
-    width:40px; 
-    height:40px; 
+    width:40px!important; 
+    height:40px!important; 
     background-color: #F5F5FC; 
     margin:5px;
 }

@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap" rel="stylesheet"> 
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link href="lib/fontawesome/css/all.css" rel="stylesheet">
-    <script src="lib/jquery.min.js"></script>
 </head>
 <body class="relative text-white-50 bg-dark">
-    <h1 class="display-3 pl-4 pt-2 text-title">Orinoc'ours</h1>
-    <button type="button" onclick="basket()" class="name btn btn-secondary btn-lg mt-4">Panier</button>
+    <h1 class="display-3 ps-4 pt-2 text-title">Orinoc'ours</h1>
+    <div id="alert"></div>
+    <button type="button" onclick="openBasketModal()" class="name btn btn-secondary btn-lg mt-4">Panier</button>
         <section class="container-fluid container-1">
             <div class="container-border border border-light rounded mx-auto py-4 px-4 col-lg-5 col-12 text-center">
                 <h4>Boutique en ligne d'Ours en peluche</h4>
@@ -28,7 +28,7 @@
         <div id="creationmodal"></div>
         <div id="basketmodal"></div>
     <section class="container-fluid">
-        <h2 class="ml-3 mt-4"><span class="sous-ligne">Les Ours</span> !</h2>
+        <h2 class="ms-3 mt-4"><span class="sous-ligne">Les Ours</span> !</h2>
             <article class="row container-fluid sous-container-2" id="les-ours"></article>
     </section>
 </main>
@@ -40,8 +40,6 @@
     <i class="fab fa-snapchat-square fa-3x p-3"></i>
 <p class="text-footer">Copyright © Orinoc'Ours 2021 – Tous droits réservés</p>
 </footer>
-    <script src="lib/popper.min.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="dist/app.bundle.js"></script>
 </body>
 </html>
