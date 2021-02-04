@@ -30,6 +30,15 @@ background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue
     max-height:100%;
 }
 
+.redimension-basket {
+    height:6rem;
+    object-fit:cover;
+    max-width:100%;
+    width:22%;
+    max-height:100%;
+}
+
+
 .sous-ligne {
     text-decoration: white wavy underline;
 }
@@ -105,6 +114,10 @@ background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue
 .text-footer {
     font-size:12px;
 }
+
+.fa-times {
+    color: #be1111;
+    }
 
 @media screen and (max-width: 600px)
 {

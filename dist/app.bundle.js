@@ -111,6 +111,7 @@ function addBasket(id) {
     var monobjet  = {
         id : tableOurs[i]._id,
         name : tableOurs[i].name,
+        image : tableOurs[i].imageUrl,
         price : tableOurs[i].price
       };
       var monobjet_json = JSON.stringify(monobjet);
@@ -122,23 +123,35 @@ function addBasket(id) {
     delete(basketPrice);
     delete(basketId);
     basket(i);
+    
 }
+
     }
 }
 
 function forEachKey() {
-    
+let test;
+let calcultotal = 0;
     for (var i = 0; i < sessionStorage.length; i++) {
       console.log(sessionStorage.key(i));
       test = sessionStorage.key(i);
       bidule = sessionStorage.getItem(test);
       const obj = JSON.parse(bidule);
+       calcultotal += obj.price;
       initBasket = document.getElementById('modal-body');
-      let initModalBasket = '<p> ' + obj.name + ' au prix de ' + obj.price + '€</p>';
-      console.log(sessionStorage.getItem(test));
-      initBasket.innerHTML += initModalBasket;
+      if (test !== '') {
+      initModalBasket2 = '<figure><h5><i class="fas fa-times fa-2x my-auto pe-2"></i><img class="redimension-basket" src="' + obj.image + '"/> ' + obj.name + '  ' + obj.price + ' € </h5></figure>';
+      initBasket.innerHTML += initModalBasket2;
+      } else if (test === 'undefined') {
+      initModalBasket3 = '<p> Panier vide ! quattends tu pour acheter un ours ! </p>';
+      initBasket.innerHTML += initModalBasket3;  
     }
-  }
+        console.log(sessionStorage.getItem(test));
+    }
+    basketTotal = document.getElementById('modal-body');
+    modalBasketTotal = '<h5>Total du panier: ' + calcultotal + ' €<h5>';
+    basketTotal.innerHTML += modalBasketTotal;
+}
 function basket(i) {
     //var monobjet_json = sessionStorage.getItem();
     //var monobjet = JSON.parse(monobjet_json);
@@ -163,7 +176,7 @@ function basket(i) {
     initModalBasketText += '</div>';
     initModalBasketText += '</div>';
     initModalBasketText += '<div class"modal-backdrop fade show" id="basketbackdrop" style="display: none;"></div>';
-    initModalBasket.innerHTML += initModalBasketText;
+    initModalBasket.innerHTML = initModalBasketText;
     forEachKey();
 }
 
@@ -250,7 +263,7 @@ request.onreadystatechange = function() {
                 initModalText += '</div>';
                 initModalText += '<div id="modal-footer" class="modal-footer">';
                 initModalText += '<button type="button" id="modal-close" onclick="closeModalDescr(' + i + ')"; class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
-                initModalText += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + i + '" data-toggle="modal" data-target="#basketmodal' + i + '" onclick="addBasket(' + i + '),closeModalDescr(' + i + ')" class="btn btn-primary">Acheter</button>';
+                initModalText += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + i + '" data-toggle="modal" data-target="#basketmodal' + i + '" onclick="closeBasketModal(),addBasket(' + i + '),closeModalDescr(' + i + ')" class="btn btn-primary">Acheter</button>';
                 initModalText += '</div>';
                 initModalText += '</div>';
                 initModalText += '</div>';
