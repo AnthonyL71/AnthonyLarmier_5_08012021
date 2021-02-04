@@ -104,9 +104,7 @@ function colors() {
 // }
 
 function addBasket(id) {
-                 document.getElementById('modal-header').innerHTML = "";
                  document.getElementById('modal-body').innerHTML = "";
-                 document.getElementById('modal-footer').innerHTML = "";
     document.location.reload();
     for (let i = 0; i < tableOurs.length; i++) {
         if (id == i) {
@@ -157,7 +155,7 @@ function basket(i) {
     initModalBasketText += '<h3> </h3>'; 
     initModalBasketText += '</div>';
     initModalBasketText += '<div class="modal-footer">';
-    initModalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal()"; class="btn btn-md btn-primary">Vider mon panier</button>';
+    initModalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-md btn-primary">Vider mon panier</button>';
     initModalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-md btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
     initModalBasketText += '</div>';
     initModalBasketText += '</div>';
@@ -171,9 +169,7 @@ function basket(i) {
 }
 
 function clearBasket() {
-    document.getElementById('modal-header').innerHTML = "";
     document.getElementById('modal-body').innerHTML = "";
-    document.getElementById('modal-footer').innerHTML = "";
     sessionStorage.clear();
     openBasketModal();
 }
