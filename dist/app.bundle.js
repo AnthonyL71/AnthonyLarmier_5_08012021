@@ -38,19 +38,19 @@ function addBasket(id) {
 
 // Fonction qui affiche le panier
 function basket() {
-    let test;
-let calcultotal = 0;
+    let storageKey;
+let basketTotal = 0;
     ModalBasket = document.getElementById('basketmodal');
     let ModalBasketText = '<div class="modal fade" aria-labelledby="label" id="basket-list" tabindex="-1" role="dialog" aria-hidden="true">';
-    ModalBasketText += '<div class="modal-dialog modal-dialog-scrollable" role="document">';
+    ModalBasketText += '<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">';
     ModalBasketText += '<div class="modal-content">';
     ModalBasketText += '<div id="modal-header" class="modal-header">';
     ModalBasketText += '<h3 class="modal-title mx-auto col-12 text-center"> Panier</h3>';
     ModalBasketText += '</div>';
     ModalBasketText += '<div id="modal-body" class="modal-body">';
     ModalBasketText += '<div class="tableau">';
-    ModalBasketText += '<table id="myTable" class="tablesorter-bootstrap table table-striped" data-toggle="table">';
-    ModalBasketText += '<thead class="thead-dark dmserif text-center">';
+    ModalBasketText += '<table id="myTable" class="tablesorter-bootstrap table" data-toggle="table">';
+    ModalBasketText += '<thead class="text-center text-white-50">';
     ModalBasketText += '<tr>';
     ModalBasketText += '<th class="col-1"></th>';
     ModalBasketText += '<th class="col-7">Image</th>';
@@ -58,27 +58,25 @@ let calcultotal = 0;
     ModalBasketText += '<th class="col-2">Prix</th>';
     ModalBasketText += '</tr>';
     ModalBasketText += '</thead>';
-    ModalBasketText += '</dt>';
     ModalBasketText += '</div>';
     ModalBasketText += '</div>';
     for (var i = 0; i < sessionStorage.length; i++) {
-        test = sessionStorage.key(i);
-        bidule = sessionStorage.getItem(test);
-        const obj = JSON.parse(bidule);
+        storageKey = sessionStorage.key(i);
+        storageJson = sessionStorage.getItem(storageKey);
+        const obj = JSON.parse(storageJson);
         let id = i;
-        calcultotal += obj.price;
-        ModalBasketText += '<tr>';
-        ModalBasketText += '<td style="padding-top:10%;"><a onclick="closeBasketModal(),deleteBasket(' + test + '),openBasketModal()"><i class="fas fa-times fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td> ' + obj.name + '</td><td>  ' + obj.price + ' € </td>';
+        basketTotal += obj.price;
+        ModalBasketText += '<tr class="text-white-50 text-center">';
+        ModalBasketText += '<h3><td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal()"><i class="fas fa-times fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td> ' + obj.name + '</td><td>  ' + obj.price + ' € </td></h3>';
         ModalBasketText += '</tr>';
         }
-        ModalBasketText += '</tbody>';
-        ModalBasketText += '</table>';
-    ModalBasketText += '<h5>Total du panier: ' + calcultotal + ' €<h5>';
-    ModalBasketText += '<h3> </h3>'; 
-    ModalBasketText += '</div>';
-    ModalBasketText += '<div class="modal-footer mx-auto">';
-    ModalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-md btn-primary">Vider mon panier</button>';
-    ModalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-md btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
+    ModalBasketText += '<tr class="text-white-50 text-center">';
+    ModalBasketText += '<h3><td /><td>Total du panier:</td><td /><td> ' + basketTotal + ' €</td></h3>';
+    ModalBasketText += '</tr>';
+    ModalBasketText += '</table>';
+    ModalBasketText += '<div class="modal-footer justify-content-center">';
+    ModalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-lg btn-primary">Vider mon panier</button>';
+    ModalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-lg btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
     ModalBasketText += '</div>';
     ModalBasketText += '</div>';
     ModalBasketText += '</div>';
