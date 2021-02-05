@@ -30,7 +30,6 @@ function addBasket(id) {
     // let addBasketText = '<div class="alert alert-info alert-dismissible fade show" role="alert">' + tableOurs[i].name + ' ajouté au panier !</div>';
     // alertAddBasket.innerHTML += addBasketText;
     basket();
-    
 }
 
     }
@@ -97,6 +96,15 @@ function clearBasket() {
 // On supprime un article du panier
 function deleteBasket(i) {
     sessionStorage.removeItem(i);
+}
+
+// On vérifie s'il y a des entrées dans le panier, et on affiche le nombre dans sur le bouton panier
+function checkBasket() {
+    let numberKey;
+        numberKey = sessionStorage.length;
+    let initBadge = document.getElementById('badge');
+    let badgeText = '<span class="red mr-4">'+ numberKey + '</span>';
+    initBadge.innerHTML = badgeText;
 }
 // Création de la requète pour télécharger je json en tableau
 // Et ensuite l'afficher sur la page d'accueil du site
@@ -189,7 +197,7 @@ request.onreadystatechange = function() {
 };
 request.open("GET", "https://oc-devweb-p5-api.herokuapp.com/api/teddies");
 request.send();
-
+checkBasket()
 // Fonction qui ouvre la modal de description de l'article
 function openModalDescr(i) {
     document.getElementById('modal-list' +  i + '').style.display = "block"
@@ -202,6 +210,7 @@ function closeModalDescr(i) {
     document.getElementById('backdrop' + i + '').style.display = "none"
     document.getElementById('modal-list' + i + '').style.display = "none"
     document.getElementById('modal-list' + i + '').className += document.getElementById('modal-list' + i + '').className.replace("show", "")
+    checkBasket()
 }
 
 // Fonction qui ouvre la modal du panier
@@ -216,5 +225,6 @@ function closeBasketModal() {
     document.getElementById('basketbackdrop').style.display = "none"
     document.getElementById('basket-list').style.display = "none"
     document.getElementById('basket-list').className += document.getElementById('basket-list').className.replace("show", "")
+    checkBasket()
 }
 
