@@ -12,99 +12,9 @@ function colors() {
         }, false);
     }
 }
-// Création du texte dans la modal a l'appuie du bouton "Me connaitre"
-// function openModalDescr(id) {
-// // Fonction pour récuperer la liste des Ours de l'api
-//     let listOurs = {};
-//     function functionTableOurs() {
-//         var requeste = new XMLHttpRequest();
-//         requeste.onreadystatechange = function() {
-//             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-//                 response = JSON.parse(this.responseText);
-//                 requeste.onload = function() {
-//                     listOurs = response;
-//                 }
-//             }
-//         }
-//     requeste.open("GET", "https://oc-devweb-p5-api.herokuapp.com/api/teddies");
-//     requeste.send();
-//     };
-//     functionTableOurs();
-//     setTimeout(function() {
-//         // On boucle sur listOurs pour avoir le nom description prix couleur et l'image de chaque article
-//         for (let d = 0; d < listOurs.length; d++) {
-//             // On vérifie que ce soit le meme id que dans la liste
-//             if (d == id) {
-//                 basketId = listOurs[d]._id;
-//                 basketName = listOurs[d].name;
-//                 basketPrice = listOurs[d].price;
-//                 colorsOurs = listOurs[d].colors;
-//                 document.getElementById('modal-header' + id + '').innerHTML = "";
-//                 document.getElementById('modal-body' + id + '').innerHTML = "";
-//                 document.getElementById('modal-footer' + id + '').innerHTML = "";
-//                 let creaHeader = document.getElementById('modal-header' + id + '');
-//                 let textHeader = '<h3 class="modal-title mx-auto col-12 text-center"> ' + listOurs[d].name + '</h3>';
-//                 creaHeader.innerHTML += textHeader;
-//                 let creaFooter = document.getElementById('modal-footer' + id + '');
-//                 textFooter = '<div class="mx-auto">';
-//                 textFooter += '<button type="button" id="modal-close" class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
-//                 textFooter += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + id + '" data-toggle="modal" data-target="#basketmodal' + id + '" onclick="addbasket(' + id + ')" class="btn btn-primary">Acheter</button>';
-//                 textFooter += '</div>';
-//                 creaFooter.innerHTML += textFooter;
-//                 let creaBody = document.getElementById('modal-body' + id + '');
-//                 let textBody = '<img class="redimension" src="' + listOurs[d].imageUrl + '"/>';
-//                 textBody += '<p class="mx-auto col-12 text-center"> ' + listOurs[d].description + ' </p>';
-//                 textBody += '<p class="text-right">' + listOurs[d].price + ' €</p>';
-//                 textBody += '<p class="ml-4"> Autres couleurs disponible : </p>';
-//                 // On crée un panel de couleur pour chaque ours suivant les couleurs prédifini dans l'api
-//                 textBody += '<div class="ml-4 panelcouleurs row" id="panelco">';
-//                 for (let d = 0; d < colorsOurs.length; d++) {
-//                     switch (colorsOurs[d]) {
-//                         case 'Tan':
-//                             textBody += '<div id="square-tan" class="square-tan"></div>';
-//                             break;
-//                         case "Chocolate":
-//                             textBody += '<div id="square-chocolate" class="square-chocolate"></div>';
-//                             break;
-//                         case "Black":
-//                             textBody += '<div id="square-black" class="square-black"></div>';
-//                             break;
-//                         case "White":
-//                             textBody += '<div id="square-white" class="square-white"></div>';
-//                             break;
-//                         case "Pale brown":
-//                             textBody += '<div id="square-paleborwn" class="square-palebrown"></div>';
-//                             break;
-//                         case "Dark brown":
-//                             textBody += '<div id="square-darkbrown" class="square-darkbrown"></div>';
-//                             break;
-//                         case "Brown":
-//                             textBody += '<div id="square-brown" class="square-brown"></div>';
-//                             break;
-//                         case "Blue":
-//                             textBody += '<div id="square-blue" class="square-blue"></div>';
-//                             break;
-//                         case "Pink":
-//                             textBody += '<div id="square-pink" class="square-pink"></div>';
-//                             break;
-//                         case "Beige":
-//                             textBody += '<div id="square-beige" class="square-beige"></div>';
-//                             break;
-//                         default:
-//                             textBody += '<p>Aucunes couleurs disponibles</p>';
-//                     }
-//                 }
-//                 textBody += '</div>';
-//                 creaBody.innerHTML += textBody;
-//             }
-//         }
-//     // On lance la fonction colors() pour que a la séléction de la couleur elle soit encadré
-//     colors();
-//     }, 1000);
-// }
 
+// On ajoute un article dans le panier
 function addBasket(id) {
-
     for (let i = 0; i < tableOurs.length; i++) {
         if (id == i) {
             basketId = tableOurs[i]._id;
@@ -115,77 +25,81 @@ function addBasket(id) {
         price : tableOurs[i].price
       };
       var monobjet_json = JSON.stringify(monobjet);
-    sessionStorage.setItem(basketId,monobjet_json);
+    sessionStorage.setItem(id,monobjet_json);
     // alertAddBasket = document.getElementById('alert');
     // let addBasketText = '<div class="alert alert-info alert-dismissible fade show" role="alert">' + tableOurs[i].name + ' ajouté au panier !</div>';
     // alertAddBasket.innerHTML += addBasketText;
-    delete(basketName);
-    delete(basketPrice);
-    delete(basketId);
-    basket(i);
+    basket();
     
 }
 
     }
 }
 
-function forEachKey() {
-let test;
+// Fonction qui affiche le panier
+function basket() {
+    let test;
 let calcultotal = 0;
+    ModalBasket = document.getElementById('basketmodal');
+    let ModalBasketText = '<div class="modal fade" aria-labelledby="label" id="basket-list" tabindex="-1" role="dialog" aria-hidden="true">';
+    ModalBasketText += '<div class="modal-dialog modal-dialog-scrollable" role="document">';
+    ModalBasketText += '<div class="modal-content">';
+    ModalBasketText += '<div id="modal-header" class="modal-header">';
+    ModalBasketText += '<h3 class="modal-title mx-auto col-12 text-center"> Panier</h3>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '<div id="modal-body" class="modal-body">';
+    ModalBasketText += '<div class="tableau">';
+    ModalBasketText += '<table id="myTable" class="tablesorter-bootstrap table table-striped" data-toggle="table">';
+    ModalBasketText += '<thead class="thead-dark dmserif text-center">';
+    ModalBasketText += '<tr>';
+    ModalBasketText += '<th class="col-1"></th>';
+    ModalBasketText += '<th class="col-7">Image</th>';
+    ModalBasketText += '<th class="col-2">Prénom</th>';
+    ModalBasketText += '<th class="col-2">Prix</th>';
+    ModalBasketText += '</tr>';
+    ModalBasketText += '</thead>';
+    ModalBasketText += '</dt>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '</div>';
     for (var i = 0; i < sessionStorage.length; i++) {
-      console.log(sessionStorage.key(i));
-      test = sessionStorage.key(i);
-      bidule = sessionStorage.getItem(test);
-      const obj = JSON.parse(bidule);
-       calcultotal += obj.price;
-      initBasket = document.getElementById('modal-body');
-      if (test !== '') {
-      initModalBasket2 = '<figure><h5><i class="fas fa-times fa-2x my-auto pe-2"></i><img class="redimension-basket" src="' + obj.image + '"/> ' + obj.name + '  ' + obj.price + ' € </h5></figure>';
-      initBasket.innerHTML += initModalBasket2;
-      } else if (test === 'undefined') {
-      initModalBasket3 = '<p> Panier vide ! quattends tu pour acheter un ours ! </p>';
-      initBasket.innerHTML += initModalBasket3;  
-    }
-        console.log(sessionStorage.getItem(test));
-    }
-    basketTotal = document.getElementById('modal-body');
-    modalBasketTotal = '<h5>Total du panier: ' + calcultotal + ' €<h5>';
-    basketTotal.innerHTML += modalBasketTotal;
-}
-function basket(i) {
-    //var monobjet_json = sessionStorage.getItem();
-    //var monobjet = JSON.parse(monobjet_json);
-    // Affichage dans la console
-    initModalBasket = document.getElementById('basketmodal');
-    let initModalBasketText = '<div class="modal fade" id="basket-list" tabindex="-1" role="dialog" aria-hidden="true">';
-    initModalBasketText += '<div class="modal-dialog" role="document">';
-    initModalBasketText += '<div class="modal-content">';
-    initModalBasketText += '<div id="modal-header" class="modal-header">';
-    initModalBasketText += '<h3 class="modal-title mx-auto col-12 text-center"> Panier</h3>';
-    initModalBasketText += '</div>';
-    initModalBasketText += '<div id="modal-body" class="modal-body">';
-    initModalBasketText += '<h3> </h3>'; 
-    initModalBasketText += '</div>';
-    initModalBasketText += '<div class="modal-footer">';
-    initModalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-md btn-primary">Vider mon panier</button>';
-    initModalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-md btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
-    initModalBasketText += '</div>';
-    initModalBasketText += '</div>';
-    initModalBasketText += '</div>';
-    initModalBasketText += '</div>';
-    initModalBasketText += '</div>';
-    initModalBasketText += '</div>';
-    initModalBasketText += '<div class"modal-backdrop fade show" id="basketbackdrop" style="display: none;"></div>';
-    initModalBasket.innerHTML = initModalBasketText;
-    forEachKey();
+        test = sessionStorage.key(i);
+        bidule = sessionStorage.getItem(test);
+        const obj = JSON.parse(bidule);
+        let id = i;
+        calcultotal += obj.price;
+        ModalBasketText += '<tr>';
+        ModalBasketText += '<td style="padding-top:10%;"><a onclick="closeBasketModal(),deleteBasket(' + test + '),openBasketModal()"><i class="fas fa-times fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td> ' + obj.name + '</td><td>  ' + obj.price + ' € </td>';
+        ModalBasketText += '</tr>';
+        }
+        ModalBasketText += '</tbody>';
+        ModalBasketText += '</table>';
+    ModalBasketText += '<h5>Total du panier: ' + calcultotal + ' €<h5>';
+    ModalBasketText += '<h3> </h3>'; 
+    ModalBasketText += '</div>';
+    ModalBasketText += '<div class="modal-footer mx-auto">';
+    ModalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-md btn-primary">Vider mon panier</button>';
+    ModalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-md btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '</div>';
+    ModalBasketText += '<div class"modal-backdrop fade show" id="basketbackdrop" style="display: none;"></div>';
+    ModalBasket.innerHTML = ModalBasketText;
 }
 
+// On éfface tous le panier
 function clearBasket() {
     document.getElementById('modal-body').innerHTML = "";
     sessionStorage.clear();
     openBasketModal();
 }
 
+// On supprime un article du panier
+function deleteBasket(i) {
+    sessionStorage.removeItem(i);
+}
 // Création de la requète pour télécharger je json en tableau
 // Et ensuite l'afficher sur la page d'accueil du site
 var request = new XMLHttpRequest();
@@ -202,7 +116,7 @@ request.onreadystatechange = function() {
                 id = i;
                 let initProd = document.getElementById('les-ours');
                 let product = '<figure class="border col-lg-5 col-12 border-light rounded py-4 px-4 margin-center mt-5 text-center">';
-                product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + '</h1><img class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
+                product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + '</h1><img onclick="openModalDescr(' + i + ')" class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
                 product += '<button type="button" onclick="openModalDescr(' + i + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-button" data-toggle="modal" data-target="#modal-list' + i + '">Me connaitre</button>';
                 initProd.innerHTML += product;
                 // On prépare la modal description au futur clique de l'utilisateur
@@ -263,7 +177,7 @@ request.onreadystatechange = function() {
                 initModalText += '</div>';
                 initModalText += '<div id="modal-footer" class="modal-footer">';
                 initModalText += '<button type="button" id="modal-close" onclick="closeModalDescr(' + i + ')"; class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
-                initModalText += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + i + '" data-toggle="modal" data-target="#basketmodal' + i + '" onclick="closeBasketModal(),addBasket(' + i + '),closeModalDescr(' + i + ')" class="btn btn-primary">Acheter</button>';
+                initModalText += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + i + '" data-toggle="modal" data-target="#basketmodal' + i + '" onclick="addBasket(' + i + '),closeModalDescr(' + i + ')" class="btn btn-primary">Acheter</button>';
                 initModalText += '</div>';
                 initModalText += '</div>';
                 initModalText += '</div>';
@@ -278,23 +192,28 @@ request.onreadystatechange = function() {
 request.open("GET", "https://oc-devweb-p5-api.herokuapp.com/api/teddies");
 request.send();
 
+// Fonction qui ouvre la modal de description de l'article
 function openModalDescr(i) {
     document.getElementById('modal-list' +  i + '').style.display = "block"
     document.getElementById('modal-list' + i + '').className += "show"
     document.getElementById('backdrop' + i + '').style.display = "block"
 }
+
+// Fonction qui ferme la modal de description de l'article
 function closeModalDescr(i) {
     document.getElementById('backdrop' + i + '').style.display = "none"
     document.getElementById('modal-list' + i + '').style.display = "none"
     document.getElementById('modal-list' + i + '').className += document.getElementById('modal-list' + i + '').className.replace("show", "")
 }
 
+// Fonction qui ouvre la modal du panier
 function openBasketModal() {
     basket();
     document.getElementById('basket-list').style.display = "block"
     document.getElementById('basket-list').className += "show"
     document.getElementById('basketbackdrop').style.display = "block"
 }
+// Fonction qui ferme ma modal du panier
 function closeBasketModal() {
     document.getElementById('basketbackdrop').style.display = "none"
     document.getElementById('basket-list').style.display = "none"
