@@ -19,7 +19,7 @@ background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue
 .red {
     color:red;
     position:absolute;
-    right:10px;
+    right:9px;
     bottom:3px;
     font-weight:1600;
 }
