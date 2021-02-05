@@ -1,17 +1,3 @@
-// Fonction qui color la couleur séléctionné
-function colors() {
-    var imgs = document.getElementById('panelco').getElementsByTagName('div');
-    var i = 0;
-    for(var i = 0; i < imgs.length;i++){
-        imgs[i].addEventListener('click', function(y){
-            if(this.style.borderColor != "blue"){
-                this.style.border = "2.5px blue solid";
-            }else{
-                this.style.border = "none";
-            }
-        }, false);
-    }
-}
 
 // On ajoute un article dans le panier
 function addBasket(id) {
@@ -44,17 +30,17 @@ let basketTotal = 0;
     ModalBasketText += '<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">';
     ModalBasketText += '<div class="modal-content">';
     ModalBasketText += '<div id="modal-header" class="modal-header">';
-    ModalBasketText += '<h3 class="modal-title mx-auto col-12 text-center"> Panier</h3>';
+    ModalBasketText += '<h2 class="modal-title mx-auto col-12 text-center">Mon panier</h2>';
     ModalBasketText += '</div>';
     ModalBasketText += '<div id="modal-body" class="modal-body">';
     ModalBasketText += '<div class="tableau">';
     ModalBasketText += '<table id="myTable" class="tablesorter-bootstrap table" data-toggle="table">';
     ModalBasketText += '<thead class="text-center text-white-50">';
     ModalBasketText += '<tr>';
-    ModalBasketText += '<th class="col-1"></th>';
-    ModalBasketText += '<th class="col-7">Image</th>';
-    ModalBasketText += '<th class="col-2">Prénom</th>';
-    ModalBasketText += '<th class="col-2">Prix</th>';
+    ModalBasketText += '<th class="col-1"><h3>Retirer</h3></th>';
+    ModalBasketText += '<th class="col-7"><h3>Image</h3></th>';
+    ModalBasketText += '<th class="col-2"><h3>Prénom</h3></th>';
+    ModalBasketText += '<th class="col-2"><h3>Prix</h3></th>';
     ModalBasketText += '</tr>';
     ModalBasketText += '</thead>';
     ModalBasketText += '</div>';
@@ -66,11 +52,11 @@ let basketTotal = 0;
         let id = i;
         basketTotal += obj.price;
         ModalBasketText += '<tr class="text-white-50 text-center">';
-        ModalBasketText += '<h3><td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal()"><i class="fas fa-times fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td> ' + obj.name + '</td><td>  ' + obj.price + ' € </td></h3>';
+        ModalBasketText += '<td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal()"><i class="fa fa-trash fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td><h3> ' + obj.name + '</h3></td><td><h3>  ' + obj.price + ' € </h3></td>';
         ModalBasketText += '</tr>';
         }
     ModalBasketText += '<tr class="text-white-50 text-center">';
-    ModalBasketText += '<h3><td /><td>Total du panier:</td><td /><td> ' + basketTotal + ' €</td></h3>';
+    ModalBasketText += '<td /><td><h3>Total du panier:</h3></td><td /><td><h3> ' + basketTotal + ' €</h3></td>';
     ModalBasketText += '</tr>';
     ModalBasketText += '</table>';
     ModalBasketText += '<div class="modal-footer justify-content-center">';
@@ -191,7 +177,6 @@ request.onreadystatechange = function() {
                 initModalText += '<div class"modal-backdrop fade show" id="backdrop' + i + '" style="display: none;"></div>';
                 initModal.innerHTML += initModalText;
                 };
-            
         }
     }
 };

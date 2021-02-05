@@ -25,7 +25,7 @@ background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue
 }
 
 .basketbutton {
-padding-right:90px;
+padding-right:100px;
 }
 
 .margin-center {
@@ -84,6 +84,7 @@ padding-right:90px;
     background-color: #D2B48C; 
     margin:5px; 
 }
+
 .square-chocolate { 
     width:40px!important; 
     height:40px!important; 
@@ -128,9 +129,7 @@ padding-right:90px;
     font-size:12px;
 }
 
-.fa-times {
-    color: #be1111;
-    }
+
 
 @media screen and (max-width: 600px)
 {
