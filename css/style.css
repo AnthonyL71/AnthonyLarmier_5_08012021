@@ -19,9 +19,18 @@ background-image: -webkit-linear-gradient(left, red, orange, yellow, green, blue
 .red {
     color:red;
     position:absolute;
-    right:9px;
-    bottom:3px;
+    left:38px;
+    bottom:32px;
     font-weight:1600;
+}
+
+.fa-shopping-cart {
+    color:grey;
+    background-color: white;
+    padding: 23px 19px 2px 17px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50px;
 }
 
 .basketbutton {
