@@ -1,5 +1,6 @@
-function timerDivAlert() {
+function hiddenDivAlert() {
     document.getElementById("show-alert").style.visibility = "hidden";
+    document.getElementById('show-alert').innerHTML = "";
   }
 // On ajoute un article dans le panier
 function addBasket(x) {
@@ -11,22 +12,22 @@ function addBasket(x) {
         storageKey = sessionStorage.key(a);
         storageJson = sessionStorage.getItem(storageKey);
         objet = JSON.parse(storageJson);
-        cle = a;
-        console.log(cle);
+        console.log(sessionStorage.getItem(x));
+        console.log(storageKey);
+        let cle = '';
+        if(sessionStorage.getItem(x) != 'null' && storageKey == x) {
         // Si il est déjà dans le panier on met la keyExist a 1
-        if(cle === x){
             keyExist = 1;
-        }
     }
+}
+    keyExistAlert = document.getElementById('alert');
     // Si il est déjà dans le panier alors on l'indique
     if(keyExist === 1) {
-        keyExistAlert = document.getElementById('alert');
-        keyExistAlertText = '<div class="alert alert-danger position-fixed" id="show-alert" style="visibility: visible" role="alert">';
+        keyExistAlertText = '<div class="top-25 start-50 translate-middle alert alert-danger position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
         keyExistAlertText += 'Cette ours est déjà dans le panier !';
         keyExistAlertText += '</div>';
-        keyExistAlert.innerHTML = keyExistAlertText;
-          setTimeout("timerDivAlert()", 3000);
-            delete(keyExist);
+        delete(keyExist);
+          setTimeout("hiddenDivAlert()", 3000);
     } else { // Sinon on l'ajoute
     for (let i = 0; i < tableOurs.length; i++) {
         if (x == i) {
@@ -37,22 +38,18 @@ function addBasket(x) {
         image : tableOurs[i].imageUrl,
         price : tableOurs[i].price
       };
-      keyExistAlert = document.getElementById('alert');
-      keyExistAlertText = '<div class="alert alert-success position-fixed" id="show-alert" style="visibility: visible" role="alert">';
+      keyExistAlertText = '<div class="top-25 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
       keyExistAlertText += 'Ajout de ' + tableOurs[i].name + ' au panier !';
       keyExistAlertText += '</div>';
-      keyExistAlert.innerHTML = keyExistAlertText;
-        setTimeout("timerDivAlert()", 3000);
-        delete(keyExist);
+      delete(keyExist);
+        setTimeout("hiddenDivAlert()", 3000);
       var monobjet_json = JSON.stringify(monobjet);
     sessionStorage.setItem(x,monobjet_json);
-    // alertAddBasket = document.getElementById('alert');
-    // let addBasketText = '<div class="alert alert-info alert-dismissible fade show" role="alert">' + tableOurs[i].name + ' ajouté au panier !</div>';
-    // alertAddBasket.innerHTML += addBasketText;
     basket();
 }
 }
 }
+keyExistAlert.innerHTML = keyExistAlertText;
 }
 
 
@@ -66,6 +63,7 @@ let basketTotal = 0;
     modalBasketText += '<div class="modal-content">';
     modalBasketText += '<div id="modal-header" class="modal-header">';
     modalBasketText += '<h2 class="modal-title mx-auto col-12 text-center">Mon panier</h2>';
+    modalBasketText += '<button type="button" onclick="closeBasketModal()" class="close position-absolute top-0 end-0 mt-2 me-2" data-dismiss="modal"><span>&times;</span></button>';
     modalBasketText += '</div>';
     modalBasketText += '<div id="modal-body" class="modal-body">';
     modalBasketText += '<div class="tableau">';
@@ -73,7 +71,7 @@ let basketTotal = 0;
     modalBasketText += '<thead class="text-center text-white-50">';
     modalBasketText += '<tr>';
     modalBasketText += '<th class="col-1"><h3>Retirer</h3></th>';
-    modalBasketText += '<th class="col-7"><h3>Image</h3></th>';
+    modalBasketText += '<th class="col-7"><h3>Photo</h3></th>';
     modalBasketText += '<th class="col-2"><h3>Prénom</h3></th>';
     modalBasketText += '<th class="col-2"><h3>Prix</h3></th>';
     modalBasketText += '</tr>';
@@ -95,8 +93,8 @@ let basketTotal = 0;
     modalBasketText += '</tr>';
     modalBasketText += '</table>';
     modalBasketText += '<div class="modal-footer justify-content-center">';
-    modalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-lg btn-primary">Vider mon panier</button>';
-    modalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-lg btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
+    modalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal()"; class="btn btn-lg btn-secondary">Vider mon panier</button>';
+    modalBasketText += '<button type="button" onclick=""; class="btn btn-lg btn-primary mr-3">Confirmer mon panier</button>';
     modalBasketText += '</div>';
     modalBasketText += '</div>';
     modalBasketText += '</div>';
@@ -110,8 +108,13 @@ let basketTotal = 0;
 // On éfface tous le panier
 function clearBasket() {
     document.getElementById('modal-body').innerHTML = "";
+    clearAlert = document.getElementById('alert');
+    clearAlertText = '<div class="top-25 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
+    clearAlertText += 'Panier vidé !';
+    clearAlertText += '</div>';
+    clearAlert.innerHTML = clearAlertText;
+      setTimeout("hiddenDivAlert()", 4000);
     sessionStorage.clear();
-    openBasketModal();
 }
 
 // On supprime un article du panier
@@ -156,6 +159,7 @@ request.onreadystatechange = function() {
                 initModalText += '<div class="modal-content">';
                 initModalText += '<div id="modal-header' + i + '" class="modal-header">';
                 initModalText += '<h3 class="modal-title mx-auto col-12 text-center"> ' + tableOurs[i].name + '</h3>';
+                initModalText += '<button type="button" onclick="closeModalDescr(' + i + ')" class="close position-absolute top-0 end-0 mt-2 me-2" data-dismiss="modal"><span>&times;</span></button>';
                 initModalText += '</div>';
                 initModalText += '<div id="modal-body' + i + '" class="modal-body">';
                 initModalText += '<img class="redimension" src="' + tableOurs[i].imageUrl + '"/>';
@@ -202,7 +206,7 @@ request.onreadystatechange = function() {
                 }
                 initModalText += '</div>';
                 initModalText += '</div>';
-                initModalText += '<div id="modal-footer" class="modal-footer">';
+                initModalText += '<div id="modal-footer" class="modal-footer justify-content-center">';
                 initModalText += '<button type="button" id="modal-close" onclick="closeModalDescr(' + i + ')"; class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
                 initModalText += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + i + '" data-toggle="modal" data-target="#basketmodal' + i + '" onclick="addBasket(' + i + '),closeModalDescr(' + i + ')" class="btn btn-primary">Acheter</button>';
                 initModalText += '</div>';
