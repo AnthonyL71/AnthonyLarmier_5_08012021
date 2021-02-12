@@ -1,8 +1,34 @@
-
+function timerDivAlert() {
+    document.getElementById("show-alert").style.visibility = "hidden";
+  }
 // On ajoute un article dans le panier
-function addBasket(id) {
+function addBasket(x) {
+    let storagekey;
+    let keyExist;
+    // On vérifie en 1er s'il n'est pas déjà dans le panier
+    for (var a = 0; a < sessionStorage.length; a++) {
+        storageKey = sessionStorage.key(a);
+        storageJson = sessionStorage.getItem(storageKey);
+        const objet = JSON.parse(storageJson);
+    }
+        // Si il est déjà dans le panier on met la keyExist a 1
+        if(storageKey == x){
+            keyExist = 1;
+        } else { // Sinon, on la met a 0
+            keyExist = 0;
+        }
+    // Si il est déjà dans le panier alors on l'indique
+    if(keyExist === 1) {
+        keyExistAlert = document.getElementById('alert');
+        keyExistAlertText = '<div class="alert alert-danger position-fixed" id="show-alert" style="visibility: visible" role="alert">';
+        keyExistAlertText += 'Cette ours est déjà dans le panier !';
+        keyExistAlertText += '</div>';
+        keyExistAlert.innerHTML = keyExistAlertText;
+          setTimeout("timerDivAlert()", 3000);
+            delete(keyExist);
+    } else { // Sinon on l'ajoute
     for (let i = 0; i < tableOurs.length; i++) {
-        if (id == i) {
+        if (x == i) {
             basketId = tableOurs[i]._id;
     var monobjet  = {
         id : tableOurs[i]._id,
@@ -10,66 +36,74 @@ function addBasket(id) {
         image : tableOurs[i].imageUrl,
         price : tableOurs[i].price
       };
+      keyExistAlert = document.getElementById('alert');
+      keyExistAlertText = '<div class="alert alert-success position-fixed" id="show-alert" style="visibility: visible" role="alert">';
+      keyExistAlertText += 'Ajout de ' + tableOurs[i].name + ' au panier !';
+      keyExistAlertText += '</div>';
+      keyExistAlert.innerHTML = keyExistAlertText;
+        setTimeout("timerDivAlert()", 3000);
+        delete(keyExist);
       var monobjet_json = JSON.stringify(monobjet);
-    sessionStorage.setItem(id,monobjet_json);
+    sessionStorage.setItem(x,monobjet_json);
     // alertAddBasket = document.getElementById('alert');
     // let addBasketText = '<div class="alert alert-info alert-dismissible fade show" role="alert">' + tableOurs[i].name + ' ajouté au panier !</div>';
     // alertAddBasket.innerHTML += addBasketText;
     basket();
 }
-
-    }
 }
+}
+}
+
 
 // Fonction qui affiche le panier
 function basket() {
     let storageKey;
 let basketTotal = 0;
-    ModalBasket = document.getElementById('basketmodal');
-    let ModalBasketText = '<div class="modal fade" aria-labelledby="label" id="basket-list" tabindex="-1" role="dialog" aria-hidden="true">';
-    ModalBasketText += '<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">';
-    ModalBasketText += '<div class="modal-content">';
-    ModalBasketText += '<div id="modal-header" class="modal-header">';
-    ModalBasketText += '<h2 class="modal-title mx-auto col-12 text-center">Mon panier</h2>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '<div id="modal-body" class="modal-body">';
-    ModalBasketText += '<div class="tableau">';
-    ModalBasketText += '<table id="myTable" class="tablesorter-bootstrap table" data-toggle="table">';
-    ModalBasketText += '<thead class="text-center text-white-50">';
-    ModalBasketText += '<tr>';
-    ModalBasketText += '<th class="col-1"><h3>Retirer</h3></th>';
-    ModalBasketText += '<th class="col-7"><h3>Image</h3></th>';
-    ModalBasketText += '<th class="col-2"><h3>Prénom</h3></th>';
-    ModalBasketText += '<th class="col-2"><h3>Prix</h3></th>';
-    ModalBasketText += '</tr>';
-    ModalBasketText += '</thead>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '</div>';
+    modalBasket = document.getElementById('basketmodal');
+    let modalBasketText = '<div class="modal fade" aria-labelledby="label" id="basket-list" tabindex="-1" role="dialog" aria-hidden="true">';
+    modalBasketText += '<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">';
+    modalBasketText += '<div class="modal-content">';
+    modalBasketText += '<div id="modal-header" class="modal-header">';
+    modalBasketText += '<h2 class="modal-title mx-auto col-12 text-center">Mon panier</h2>';
+    modalBasketText += '</div>';
+    modalBasketText += '<div id="modal-body" class="modal-body">';
+    modalBasketText += '<div class="tableau">';
+    modalBasketText += '<table id="myTable" class="tablesorter-bootstrap table" data-toggle="table">';
+    modalBasketText += '<thead class="text-center text-white-50">';
+    modalBasketText += '<tr>';
+    modalBasketText += '<th class="col-1"><h3>Retirer</h3></th>';
+    modalBasketText += '<th class="col-7"><h3>Image</h3></th>';
+    modalBasketText += '<th class="col-2"><h3>Prénom</h3></th>';
+    modalBasketText += '<th class="col-2"><h3>Prix</h3></th>';
+    modalBasketText += '</tr>';
+    modalBasketText += '</thead>';
+    modalBasketText += '</div>';
+    modalBasketText += '</div>';
     for (var i = 0; i < sessionStorage.length; i++) {
         storageKey = sessionStorage.key(i);
         storageJson = sessionStorage.getItem(storageKey);
         const obj = JSON.parse(storageJson);
         let id = i;
         basketTotal += obj.price;
-        ModalBasketText += '<tr class="text-white-50 text-center">';
-        ModalBasketText += '<td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal()"><i class="fa fa-trash fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td><h3> ' + obj.name + '</h3></td><td><h3>  ' + obj.price + ' € </h3></td>';
-        ModalBasketText += '</tr>';
+        modalBasketText += '<tr class="text-white-50 text-center">';
+        modalBasketText += '<td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal()"><i class="fa fa-trash fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td><h3> ' + obj.name + '</h3></td><td><h3>  ' + obj.price + ' € </h3></td>';
+        modalBasketText += '</tr>';
         }
-    ModalBasketText += '<tr class="text-white-50 text-center">';
-    ModalBasketText += '<td /><td><h3>Total du panier:</h3></td><td /><td><h3> ' + basketTotal + ' €</h3></td>';
-    ModalBasketText += '</tr>';
-    ModalBasketText += '</table>';
-    ModalBasketText += '<div class="modal-footer justify-content-center">';
-    ModalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-lg btn-primary">Vider mon panier</button>';
-    ModalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-lg btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '</div>';
-    ModalBasketText += '<div class"modal-backdrop fade show" id="basketbackdrop" style="display: none;"></div>';
-    ModalBasket.innerHTML = ModalBasketText;
+    modalBasketText += '<tr class="text-white-50 text-center">';
+    modalBasketText += '<td /><td><h3>Total du panier:</h3></td><td /><td><h3> ' + basketTotal + ' €</h3></td>';
+    modalBasketText += '</tr>';
+    modalBasketText += '</table>';
+    modalBasketText += '<div class="modal-footer justify-content-center">';
+    modalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal(),openBasketModal()"; class="btn btn-lg btn-primary">Vider mon panier</button>';
+    modalBasketText += '<button type="button" id="modal-close" onclick="closeBasketModal()"; class="btn btn-lg btn-secondary mr-3" data-dismiss="modal">Fermer</button>';
+    modalBasketText += '</div>';
+    modalBasketText += '</div>';
+    modalBasketText += '</div>';
+    modalBasketText += '</div>';
+    modalBasketText += '</div>';
+    modalBasketText += '</div>';
+    modalBasketText += '<div class"modal-backdrop fade show" id="basketbackdrop" style="display: none;"></div>';
+    modalBasket.innerHTML = modalBasketText;
 }
 
 // On éfface tous le panier
