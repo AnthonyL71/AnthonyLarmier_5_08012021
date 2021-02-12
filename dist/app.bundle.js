@@ -3,20 +3,21 @@ function timerDivAlert() {
   }
 // On ajoute un article dans le panier
 function addBasket(x) {
-    let storagekey;
-    let keyExist;
+    let storageKey;
+    let keyExist = 0;
+    let objet;
     // On vérifie en 1er s'il n'est pas déjà dans le panier
     for (var a = 0; a < sessionStorage.length; a++) {
         storageKey = sessionStorage.key(a);
         storageJson = sessionStorage.getItem(storageKey);
-        const objet = JSON.parse(storageJson);
-    }
+        objet = JSON.parse(storageJson);
+        cle = a;
+        console.log(cle);
         // Si il est déjà dans le panier on met la keyExist a 1
-        if(storageKey == x){
+        if(cle === x){
             keyExist = 1;
-        } else { // Sinon, on la met a 0
-            keyExist = 0;
         }
+    }
     // Si il est déjà dans le panier alors on l'indique
     if(keyExist === 1) {
         keyExistAlert = document.getElementById('alert');
