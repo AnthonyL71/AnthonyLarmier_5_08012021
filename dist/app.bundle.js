@@ -251,25 +251,39 @@ request.onreadystatechange = function() {
                 id = i;
                 let initProd = document.getElementById('les-ours');
                 let product = '<figure class="border col-lg-5 col-12 border-light rounded py-4 px-4 margin-center mt-5 text-center">';
-                product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + '</h1><img onclick="openModalDescr(' + i + ')" class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
-                product += '<button type="button" onclick="openModalDescr(' + i + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-button" data-toggle="modal" data-target="#modal-list' + i + '">Me connaitre</button>';
+                product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + ' et ' + tableOurs[i]._id + '</h1><img onclick="openModalDescr(' + i + ')" class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
+                product += '<button type="button" onclick="openModalDescr(' + tableOurs[i]._id + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-button" data-toggle="modal" data-target="#modal-list">Me connaitre</button>';
                 initProd.innerHTML += product;
+        }
+    }
+};
+}
+request.open("GET", "https://oc-p5-api.herokuapp.com/api/teddies");
+request.send();
+}
+function loadApis(i) {
+    var requests = new XMLHttpRequest();
+    requests.onreadystatechange = function() {
+        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+            var response = JSON.parse(this.response);
+            requests.onload = function() {
+            // On met la réponse de l'api dans le tableau tableOurs
+            tableOurs = response;
+            console.log(i);
+            colorsOurs = tableOurs.colors;
                 // On prépare la modal description au futur clique de l'utilisateur
                 initModal = document.getElementById('creationmodal');
-                basketId = tableOurs[i]._id;
-                basketName = tableOurs[i].name;
-                basketPrice = tableOurs[i].price;
-                let initModalText = '<div class="modal fade" id="modal-list' + i + '" tabindex="-1" role="dialog" aria-hidden="true">';
+                let initModalText = '<div class="modal fade" id="modal-list" tabindex="-1" role="dialog" aria-hidden="true">';
                 initModalText += '<div class="modal-dialog" role="document">';
                 initModalText += '<div class="modal-content">';
-                initModalText += '<div id="modal-header' + i + '" class="modal-header">';
-                initModalText += '<h3 class="modal-title mx-auto col-12 text-center"> ' + tableOurs[i].name + '</h3>';
+                initModalText += '<div id="modal-header" class="modal-header">';
+                initModalText += '<h3 class="modal-title mx-auto col-12 text-center"> ' + tableOurs.name + '</h3>';
                 initModalText += '<button type="button" onclick="closeModalDescr(' + i + ')" class="close position-absolute top-0 end-0 mt-2 me-2" data-dismiss="modal"><span>&times;</span></button>';
                 initModalText += '</div>';
-                initModalText += '<div id="modal-body' + i + '" class="modal-body">';
-                initModalText += '<img class="redimension" src="' + tableOurs[i].imageUrl + '"/>';
-                initModalText += '<p class="mx-auto col-12 text-center"> ' + tableOurs[i].description + ' </p>';
-                initModalText += '<p class="text-end">' + tableOurs[i].price + ' €</p>';
+                initModalText += '<div id="modal-body" class="modal-body">';
+                initModalText += '<img class="redimension" src="' + tableOurs.imageUrl + '"/>';
+                initModalText += '<p class="mx-auto col-12 text-center"> ' + tableOurs.description + ' </p>';
+                initModalText += '<p class="text-end">' + tableOurs.price + ' €</p>';
                 initModalText += '<p class="ms-4"> Autres couleurs disponible : </p>';
                 // On crée un panel de couleur pour chaque ours suivant les couleurs prédifini dans l'api
                 initModalText += '<div class="ms-4 panelcouleurs row" id="panelco">';
@@ -318,29 +332,31 @@ request.onreadystatechange = function() {
                 initModalText += '</div>';
                 initModalText += '</div>';
                 initModalText += '</div>';
-                initModalText += '<div class"modal-backdrop fade show" id="backdrop' + i + '" style="display: none;"></div>';
+                initModalText += '<div class"modal-backdrop fade show" id="backdrop" style="display: none;"></div>';
                 initModal.innerHTML += initModalText;
                 };
+            }
         }
-    }
-};
-request.open("GET", "https://oc-p5-api.herokuapp.com/api/teddies");
-request.send();
-}
+        requests.open("GET", 'https://oc-p5-api.herokuapp.com/api/teddies/:_id/' + i + '');
+        requests.send();
+    };
+
+
 checkBasket();
 loadApi();
 // Fonction qui ouvre la modal de description de l'article
 function openModalDescr(i) {
-    document.getElementById('modal-list' +  i + '').style.display = "block"
-    document.getElementById('modal-list' + i + '').className += "show"
-    document.getElementById('backdrop' + i + '').style.display = "block"
+    loadApis(' + i + ');
+    document.getElementById('modal-list').style.display = "block"
+    document.getElementById('modal-list').className += "show"
+    document.getElementById('backdrop').style.display = "block"
 }
 
 // Fonction qui ferme la modal de description de l'article
-function closeModalDescr(i) {
-    document.getElementById('backdrop' + i + '').style.display = "none"
-    document.getElementById('modal-list' + i + '').style.display = "none"
-    document.getElementById('modal-list' + i + '').className += document.getElementById('modal-list' + i + '').className.replace("show", "")
+function closeModalDescr() {
+    document.getElementById('backdrop').style.display = "none"
+    document.getElementById('modal-list').style.display = "none"
+    document.getElementById('modal-list').className += document.getElementById('modal-list').className.replace("show", "")
     checkBasket();
 }
 
