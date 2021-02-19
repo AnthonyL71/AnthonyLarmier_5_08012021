@@ -125,8 +125,8 @@ function creatForm() {
     formText += '<input class="form-control mb-2" type="text" id="firstName" name="firstName" required pattern="[a-Z]" value="" />';
     formText += '<label for="lastName" class="mb-2">Nom *</label>';
     formText += '<input class="form-control mb-2" type="text" name="lastName" required pattern="[a-Z]" value="" />';
-    formText += '<label for="adress" class="mb-2">Adresse *</label>';
-    formText += '<input class="form-control mb-2" type="text" name="adress" required pattern="[a-Z]" value="" />';
+    formText += '<label for="address" class="mb-2">Adresse *</label>';
+    formText += '<input class="form-control mb-2" type="text" name="address" required pattern="[a-Z]" value="" />';
     formText += '<label for="code" class="mb-2">Code Postal *</label>';
     formText += '<input class="form-control mb-2" type="text" name="code" pattern="[0-9]{,5}" required value="" />';
     formText += '<label for="city" class="mb-2">Ville *</label>';
@@ -134,8 +134,8 @@ function creatForm() {
     formText += '<label for="email" class="mb-2">Email *</label>';
     formText += '<input class="form-control mb-4" type="email" name="email" required value="" />';
     formText += '</div><div class="col-12 text-center">';
-    formText += '<button type="button" onclick="closeFormModal()" class="btn btn-secondary btn-md col-4 mb-2 me-3">Annuler ma commande</button>';
-    formText += '<button type="button" onclick="sendForm(this.form);closeFormModal()" class="btn btn-primary btn-md col-4 mb-2">Valider ma commande</button>';
+    formText += '<button type="button" onclick="closeFormModal()" class="btn btn-secondary btn-md col-4 mb-2 me-3">Annuler</button>';
+    formText += '<button type="button" onclick="sendForm(this.form);closeFormModal()" class="btn btn-primary btn-md col-4 mb-2">Confirmer ma commande</button>';
     formText += '</div></form></div>';
     formText += '<div class"modal-backdrop fade show" id="formbackdrop" style="display: none;"></div>';
     initForm.innerHTML = formText;
@@ -143,64 +143,60 @@ function creatForm() {
 
 // On envoi les données au serveur 
 function sendForm(frm) {
-    var contact = new Object();
-    contact.firstName = frm.elements['firstName'].value;
-    contact.lastName = frm.elements['lastName'].value;
-    contact.address = frm.elements['adress'].value;
-    contact.city = frm.elements['city'].value;
-    contact.email = frm.elements['email'].value;
-    let contact_id;
+    var contact  = {
+        firstName : frm.elements['firstName'].value,
+        lastName : frm.elements['lastName'].value,
+        address : frm.elements['address'].value,
+        city : frm.elements['city'].value,
+        email : frm.elements['email'].value
+    };
+    let contact_id = [];
         for (var i = 0; i < sessionStorage.length; i++) {
             storageKey = sessionStorage.key(i);
             storageJson = sessionStorage.getItem(storageKey);
-            contact_id = JSON.parse(storageJson);
+            obj = JSON.parse(storageJson);
+            contact_id.push(obj.id);
         }
-    var test = {"contact":{"firstName":"Paul","lastName":"Durand","address":"16 rue Victor Hugo","city":"Rouen","email":"pauldurand@free.fr"},"products":["5be9cc611c9d440000c1421e","5beaae361c9d440000a57d99"]};
+
+    let bodyRequest = JSON.stringify({
+        "contact": contact, 
+        "products": contact_id
+    });
     const request = new Request(
-        "http://localhost:3000/api/teddies/order",
+        "https://oc-p5-api.herokuapp.com/api/teddies/order",
         {
         method: "POST",
-        body: JSON.stringify(test),
+        body: bodyRequest,
         headers: new Headers({
         Accept: "application/json",
         "Content-Type": "application/json",
         }),
         }
         );
-        console.log(request);
         fetch(request)
         .then((response) => response.json())
         .then((response) => {
-        let orderId = response.orderId;
-        console.log(orderId);
+            let products = response.products;
+            let orderId = response.orderId;
+            let totalprice = 0;
+            for (var i = 0; i < products.length; i++) {
+                totalprice += products[i].price;
+            }
+            sessionStorage.clear();
+            confirmAlert = document.getElementById('alert');
+            confirmAlertText = '<div class="top-50 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
+            confirmAlertText += '<h3>Commande validé. Bravo !<h3>';
+            confirmAlertText += '<br />';
+            confirmAlertText += '<h3>Merci pour la commande ' + response.contact.firstName + ' ! Note bien ton numéro de commande ci dessous.';
+            confirmAlertText += '<br /><br />';
+            confirmAlertText += '<h3>Commande numéro: ' + orderId + '<h3>';
+            confirmAlertText += '<br />';
+            confirmAlertText += '<h3>Pour un prix total de ' + totalprice + ' €<h3>';
+            confirmAlertText += '</div>';
+            confirmAlert.innerHTML = confirmAlertText;
+            setTimeout("hiddenDivAlert()", 10000);
+            checkBasket();
         });
-        console.log(request);
-        console.log(orderId);
-    confirmAlert = document.getElementById('alert');
-    confirmAlertText = '<div class="top-50 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
-    confirmAlertText += 'Commande validé. Bravo !';
-    confirmAlertText += '</div>';
-    confirmAlert.innerHTML = confirmAlertText;
-    setTimeout("hiddenDivAlert()", 4000);
-}
-
-// Exécute un appel AJAX POST
-// Prend en paramètres l'URL cible, la donnée à envoyer et la fonction callback appelée en cas de succès
-function ajaxPost(url, data, callback){
-    var req = new XMLHttpRequest();
-    req.open("POST", url);
-    req.addEventListener("load", function () {
-        if (req.status >= 200 && req.status < 400) {
-            // Appelle la fonction callback en lui passant la réponse de la requête
-            callback(req.responseText);
-        } else {
-            console.error(req.status + " " + req.statusText + " " + url);
-        }
-    });
-    req.addEventListener("error", function () {
-        console.error("Erreur réseau avec l'URL " + url);
-    });
-    req.send(data);
 }
 
 
@@ -328,7 +324,7 @@ request.onreadystatechange = function() {
         }
     }
 };
-request.open("GET", "http://localhost:3000/api/teddies");
+request.open("GET", "https://oc-p5-api.herokuapp.com/api/teddies");
 request.send();
 }
 checkBasket();
