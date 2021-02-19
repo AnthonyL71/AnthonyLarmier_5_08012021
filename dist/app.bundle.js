@@ -234,119 +234,139 @@ function checkBasket() {
     let badgeText = '<span class="red mr-4">'+ numberKey + '</span>';
     initBadge.innerHTML = badgeText;
 }
-// Création de la requète pour télécharger je json en tableau
+
+// Création de la requète pour télécharger le json en tableau
 // Et ensuite l'afficher sur la page d'accueil du site
 let tableOurs = {};
 function loadApi() {
-var request = new XMLHttpRequest();
-request.onreadystatechange = function() {
-    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-        var response = JSON.parse(this.responseText);
-        request.onload = function() {
-        // On met la réponse de l'api dans le tableau tableOurs
-        tableOurs = response;
-        // On boucle sur tableOurs pour affiché le nom l'image et le prix de chaque ours
-            for (let i = 0; i < tableOurs.length; i++) {
-                colorsOurs = tableOurs[i].colors;
-                id = i;
-                let initProd = document.getElementById('les-ours');
-                let product = '<figure class="border col-lg-5 col-12 border-light rounded py-4 px-4 margin-center mt-5 text-center">';
-                product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + ' et ' + tableOurs[i]._id + '</h1><img onclick="openModalDescr(' + i + ')" class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
-                product += '<button type="button" onclick="openModalDescr(' + tableOurs[i]._id + ')"; class="name btn btn-secondary btn-lg mt-4" id="modal-button" data-toggle="modal" data-target="#modal-list">Me connaitre</button>';
-                initProd.innerHTML += product;
-        }
-    }
-};
-}
-request.open("GET", "https://oc-p5-api.herokuapp.com/api/teddies");
-request.send();
-}
-function loadApis(i) {
-    var requests = new XMLHttpRequest();
-    requests.onreadystatechange = function() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
         if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-            var response = JSON.parse(this.response);
-            requests.onload = function() {
-            // On met la réponse de l'api dans le tableau tableOurs
-            tableOurs = response;
-            console.log(i);
-            colorsOurs = tableOurs.colors;
-                // On prépare la modal description au futur clique de l'utilisateur
+            var response = JSON.parse(this.responseText);
+            request.onload = function() {
+                // On met la réponse de l'api dans le tableau tableOurs
+                tableOurs = response;
+                // On boucle sur tableOurs pour affiché le nom l'image et le prix de chaque ours
+                for (let i = 0; i < tableOurs.length; i++) {
+                    colorsOurs = tableOurs[i].colors;
+                    id = i;
+                    let initProd = document.getElementById('les-ours');
+                    let product = '<figure class="border col-lg-5 col-12 border-light rounded py-4 px-4 margin-center mt-5 text-center">';
+                    product += '<figcaption><h1 class="name mb-2">' + tableOurs[i].name + '</h1><img onclick="clearModalDescr();loadCart(\'' + tableOurs[i]._id + '\');openModalDescr(\'' + tableOurs[i]._id + '\')" class="redimension" src="' + tableOurs[i].imageUrl + '"/></figcaption>';
+                    product += '<button type="button" onclick="clearModalDescr();loadCart(\'' + tableOurs[i]._id + '\');openModalDescr(\'' + tableOurs[i]._id + '\')"; class="name btn btn-secondary btn-lg mt-4" id="modal-button" data-toggle="modal" data-target="#modal-list">Me connaitre</button>';
+                    initProd.innerHTML += product;
+                }
+                // On crée la futur modal vide pour l'affichage de la description de l'ours
                 initModal = document.getElementById('creationmodal');
                 let initModalText = '<div class="modal fade" id="modal-list" tabindex="-1" role="dialog" aria-hidden="true">';
                 initModalText += '<div class="modal-dialog" role="document">';
                 initModalText += '<div class="modal-content">';
-                initModalText += '<div id="modal-header" class="modal-header">';
-                initModalText += '<h3 class="modal-title mx-auto col-12 text-center"> ' + tableOurs.name + '</h3>';
-                initModalText += '<button type="button" onclick="closeModalDescr(' + i + ')" class="close position-absolute top-0 end-0 mt-2 me-2" data-dismiss="modal"><span>&times;</span></button>';
+                initModalText += '<div id="modal-headerDescr" class="modal-header">';
+                initModalText += '<button type="button" onclick="closeModalDescr()" class="close position-absolute top-0 end-0 mt-2 me-2" data-dismiss="modal"><span>&times;</span></button>';
                 initModalText += '</div>';
-                initModalText += '<div id="modal-body" class="modal-body">';
-                initModalText += '<img class="redimension" src="' + tableOurs.imageUrl + '"/>';
-                initModalText += '<p class="mx-auto col-12 text-center"> ' + tableOurs.description + ' </p>';
-                initModalText += '<p class="text-end">' + tableOurs.price + ' €</p>';
-                initModalText += '<p class="ms-4"> Autres couleurs disponible : </p>';
-                // On crée un panel de couleur pour chaque ours suivant les couleurs prédifini dans l'api
-                initModalText += '<div class="ms-4 panelcouleurs row" id="panelco">';
-                for (let d = 0; d < colorsOurs.length; d++) {
-                    switch (colorsOurs[d]) {
-                        case 'Tan':
-                            initModalText += '<div id="square-tan" class="square-tan"></div>';
-                            break;
-                        case "Chocolate":
-                            initModalText += '<div id="square-chocolate" class="square-chocolate"></div>';
-                            break;
-                        case "Black":
-                            initModalText += '<div id="square-black" class="square-black"></div>';
-                            break;
-                        case "White":
-                            initModalText += '<div id="square-white" class="square-white"></div>';
-                            break;
-                        case "Pale brown":
-                            initModalText += '<div id="square-paleborwn" class="square-palebrown"></div>';
-                            break;
-                        case "Dark brown":
-                            initModalText += '<div id="square-darkbrown" class="square-darkbrown"></div>';
-                            break;
-                        case "Brown":
-                            initModalText += '<div id="square-brown" class="square-brown"></div>';
-                            break;
-                        case "Blue":
-                            initModalText += '<div id="square-blue" class="square-blue"></div>';
-                            break;
-                        case "Pink":
-                            initModalText += '<div id="square-pink" class="square-pink"></div>';
-                            break;
-                        case "Beige":
-                            initModalText += '<div id="square-beige" class="square-beige"></div>';
-                            break;
-                        default:
-                            initModalText += '<p>Aucunes couleurs disponibles</p>';
-                    }
-                }
+                initModalText += '<div id="modal-bodyDescr" class="modal-body">';
                 initModalText += '</div>';
-                initModalText += '</div>';
-                initModalText += '<div id="modal-footer" class="modal-footer justify-content-center">';
-                initModalText += '<button type="button" id="modal-close" onclick="closeModalDescr(' + i + ')"; class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
-                initModalText += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + i + '" data-toggle="modal" data-target="#basketmodal' + i + '" onclick="addBasket(' + i + '),closeModalDescr(' + i + ')" class="btn btn-primary">Acheter</button>';
+                initModalText += '<div id="modal-footerDescr" class="modal-footer justify-content-center">';
                 initModalText += '</div>';
                 initModalText += '</div>';
                 initModalText += '</div>';
                 initModalText += '</div>';
                 initModalText += '<div class"modal-backdrop fade show" id="backdrop" style="display: none;"></div>';
                 initModal.innerHTML += initModalText;
-                };
             }
+        };
+    }
+request.open("GET", "https://oc-p5-api.herokuapp.com/api/teddies");
+request.send();
+}
+
+// On vide la modal avant l'affichage du nouvelle article
+function clearModalDescr() {
+    document.getElementById('modal-headerDescr').innerHTML = "";
+    document.getElementById('modal-bodyDescr').innerHTML = "";
+    document.getElementById('modal-footerDescr').innerHTML = "";
+}
+
+// Fonction qui remplie la modal avec les descriptions venu de l'api
+function loadCart(i) {
+    let x;
+    var requests = new XMLHttpRequest();
+    requests.onreadystatechange = function() {
+        if (this.readyState == XMLHttpRequest.DONE) {
+            var response = JSON.parse(this.response);
+            requests.onload = function() {
+                for (let j = 0; j < tableOurs.length; j++) {
+                    if (tableOurs[j].name == response.name) {
+                        x = j;
+                    }
+                }
+                // On met la réponse de l'api dans le tableau tableOurs
+                colorsOurs = response.colors;
+                // On prépare la modal description au futur clique de l'utilisateur
+                let initModalHeaderDescr = document.getElementById('modal-headerDescr');
+                let initModalHeaderDescrText = '<h3 class="modal-title mx-auto col-12 text-center"> ' + response.name + '</h3>';
+                initModalHeaderDescr.innerHTML = initModalHeaderDescrText;
+                let initModalBodyDescr = document.getElementById('modal-bodyDescr');
+                let initModalBodyDescrText = '<img class="redimension" src="' + response.imageUrl + '"/>';
+                initModalBodyDescrText += '<p class="mx-auto col-12 text-center"> ' + response.description + ' </p>';
+                initModalBodyDescrText += '<p class="text-end">' + response.price + ' €</p>';
+                initModalBodyDescrText += '<p class="ms-4"> Autres couleurs disponible : </p>';
+                // On crée un panel de couleur pour chaque ours suivant les couleurs prédifini dans l'api
+                initModalBodyDescrText += '<div class="ms-4 panelcouleurs row" id="panelco">';
+                for (let d = 0; d < colorsOurs.length; d++) {
+                    switch (colorsOurs[d]) {
+                        case 'Tan':
+                            initModalBodyDescrText += '<div id="square-tan" class="square-tan"></div>';
+                            break;
+                        case "Chocolate":
+                            initModalBodyDescrText += '<div id="square-chocolate" class="square-chocolate"></div>';
+                            break;
+                        case "Black":
+                            initModalBodyDescrText += '<div id="square-black" class="square-black"></div>';
+                            break;
+                        case "White":
+                            initModalBodyDescrText += '<div id="square-white" class="square-white"></div>';
+                            break;
+                        case "Pale brown":
+                            initModalBodyDescrText += '<div id="square-paleborwn" class="square-palebrown"></div>';
+                            break;
+                        case "Dark brown":
+                            initModalBodyDescrText += '<div id="square-darkbrown" class="square-darkbrown"></div>';
+                            break;
+                        case "Brown":
+                            initModalBodyDescrText += '<div id="square-brown" class="square-brown"></div>';
+                            break;
+                        case "Blue":
+                            initModalBodyDescrText += '<div id="square-blue" class="square-blue"></div>';
+                            break;
+                        case "Pink":
+                            initModalBodyDescrText += '<div id="square-pink" class="square-pink"></div>';
+                            break;
+                        case "Beige":
+                            initModalBodyDescrText += '<div id="square-beige" class="square-beige"></div>';
+                            break;
+                        default:
+                            initModalBodyDescrText += '<p>Aucunes couleurs disponibles</p>';
+                    }
+                }
+                initModalBodyDescr.innerHTML = initModalBodyDescrText;
+                let initModalFooterDescr = document.getElementById('modal-footerDescr');
+                let initModalFooterDescrText = '<button type="button" id="modal-close" onclick="closeModalDescr()"; class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
+                initModalFooterDescrText += '<button type="button" id="modal-close" data-dismiss="modal" id="basketmodal' + x + '" data-toggle="modal" data-target="#basketmodal' + x + '" onclick="addBasket(' + x + '),closeModalDescr(' + x + ')" class="btn btn-primary">Acheter</button>';
+                initModalFooterDescr.innerHTML = initModalFooterDescrText;    
+            };
         }
-        requests.open("GET", 'https://oc-p5-api.herokuapp.com/api/teddies/:_id/' + i + '');
-        requests.send();
-    };
+    }
+requests.open("GET", 'https://oc-p5-api.herokuapp.com/api/teddies/' + i + '');
+requests.send();
+};
 
 
 checkBasket();
 loadApi();
+
 // Fonction qui ouvre la modal de description de l'article
 function openModalDescr(i) {
-    loadApis(' + i + ');
     document.getElementById('modal-list').style.display = "block"
     document.getElementById('modal-list').className += "show"
     document.getElementById('backdrop').style.display = "block"
