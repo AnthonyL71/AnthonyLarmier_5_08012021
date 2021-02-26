@@ -141,45 +141,46 @@ function creatForm() {
     initForm.innerHTML = formText;
 }
 
+// Fonction pour vérifier que prénom et nom est bien remplie
+let verifFirstNameLastName = (texte) => {
+    let regexFirstNameLastName = /^[A-Za-zéèàêëç-\s]{2,50}$/;
+    if(regexFirstNameLastName.test(texte) == false) {
+        alert('Veuillez rentrer un nom ou prénom contenant au moins deux lettres et juste des lettres');
+        return false;
+    }
+    else {
+        return texte;
+    }
+}
+
+// Fonction pour vérifier que l'adresse et la ville est bien remplie
+let verifAddressCity = (texte) => {
+    let regexAdressCity = /^[A-Za-z0-9éèêëç-\s]{2,100}$/;
+    if(regexAdressCity.test(texte) == false) {
+        alert('Veuillez rentrer une adresse ou une ville contenant au moins deux caractères');
+        return false;
+    }
+    else {
+        return texte;
+    }
+}
+
+// Fonction pour vérifier que l'adresse mail ressemble bien a ours@ours.com
+let verifEmail = (email) => {
+    let regexEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(regexEmail.test(email) == false) {
+        alert('Veuillez rentrer un email correct (de la forme ours@ours.com');
+        return false;
+    }
+    else {
+        return email;
+    } 
+}
 
 // On envoi les données au serveur 
 function sendForm(frm) {
-
-    // Fonction pour vérifier que prénom et nom est bien remplie
-    let verifFirstNameLastName = (texte) => {
-        let regexFirstNameLastName = /^[A-Za-zéèàêëç-\s]{2,50}$/;
-        if(regexFirstNameLastName.test(texte) == false) {
-            alert('Veuillez rentrer un nom ou prénom contenant au moins deux lettres et juste des lettres');
-            return false;
-        }
-        else {
-            return texte;
-        }
-    }
-    // Fonction pour vérifier que l'adresse et la ville est bien remplie
-    let verifAddressCity = (texte) => {
-        let regexAdressCity = /^[A-Za-z0-9éèêëç-\s]{2,100}$/;
-        if(regexAdressCity.test(texte) == false) {
-            alert('Veuillez rentrer une adresse ou une ville contenant au moins deux caractères');
-            return false;
-        }
-        else {
-            return texte;
-        }
-    }
-    // Fonction pour vérifier que l'adresse mail ressemble bien a ours@ours.com
-    let verifEmail = (email) => {
-        let regexEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(regexEmail.test(email) == false) {
-            alert('Veuillez rentrer un email correct (de la forme ours@ours.com');
-            return false;
-        }
-        else {
-            return email;
-        } 
-    }
-    // On lance la vérification du formulaire, s'il est correcte on passe a la suite, sinon on ouvre un alert
-    if(verifEmail(frm.elements['email'].value) && verifFirstNameLastName(frm.elements['firstName'].value) && verifFirstNameLastName(frm.elements['lastName'].value) && verifAdressCity(frm.elements['city'].value) && verifAdressCity(frm.elements['address'].value)){
+    // On lance la vérification du formulaire, s'il est correcte on passe a la suite, sinon on ouvre une alerte
+    if(verifEmail(frm.elements['email'].value) && verifFirstNameLastName(frm.elements['firstName'].value) && verifFirstNameLastName(frm.elements['lastName'].value) && verifAddressCity(frm.elements['city'].value) && verifAddressCity(frm.elements['address'].value)){
         closeFormModal()
         var contact  = {
             firstName : frm.elements['firstName'].value,
