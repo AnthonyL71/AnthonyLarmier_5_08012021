@@ -36,7 +36,7 @@ function addBasket(x) {
                 id : tableOurs[i]._id,
                 name : tableOurs[i].name,
                 image : tableOurs[i].imageUrl,
-                price : tableOurs[i].price
+                price : tableOurs[i].price/100
                 };
                 keyExistAlertText = '<div class="top-25 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
                 keyExistAlertText += 'Ajout de ' + tableOurs[i].name + ' au panier !';
@@ -122,56 +122,94 @@ function creatForm() {
     formText += '<form>';
     formText += '<div class="container col-6"';
     formText += '<label for="firstName" class="mb-2">Prénom *</label>';
-    formText += '<input class="form-control mb-2" type="text" id="firstName" name="firstName" required pattern="[a-Z]" value="" />';
+    formText += '<input class="form-control mb-2" type="text" id="firstName" min="3" name="firstName">';
     formText += '<label for="lastName" class="mb-2">Nom *</label>';
-    formText += '<input class="form-control mb-2" type="text" name="lastName" required pattern="[a-Z]" value="" />';
+    formText += '<input class="form-control mb-2" type="text" name="lastName">';
     formText += '<label for="address" class="mb-2">Adresse *</label>';
-    formText += '<input class="form-control mb-2" type="text" name="address" required pattern="[a-Z]" value="" />';
-    formText += '<label for="code" class="mb-2">Code Postal *</label>';
-    formText += '<input class="form-control mb-2" type="text" name="code" pattern="[0-9]{,5}" required value="" />';
+    formText += '<input class="form-control mb-2" type="text" name="address">';
+    formText += '<label for="code" class="mb-2">Code Postal</label>';
+    formText += '<input class="form-control mb-2" type="text" name="code">';
     formText += '<label for="city" class="mb-2">Ville *</label>';
-    formText += '<input class="form-control mb-2" type="text" name="city" required pattern="[a-Z]" value="" />';
+    formText += '<input class="form-control mb-2" type="text" name="city">';
     formText += '<label for="email" class="mb-2">Email *</label>';
-    formText += '<input class="form-control mb-4" type="email" name="email" required value="" />';
+    formText += '<input class="form-control mb-4" type="email" id="email" name="email">';
     formText += '</div><div class="col-12 text-center">';
     formText += '<button type="button" onclick="closeFormModal()" class="btn btn-secondary btn-md col-4 mb-2 me-3">Annuler</button>';
-    formText += '<button type="button" onclick="sendForm(this.form);closeFormModal()" class="btn btn-primary btn-md col-4 mb-2">Confirmer ma commande</button>';
+    formText += '<button type="button" onclick="sendForm(this.form);" class="btn btn-primary btn-md col-4 mb-2">Confirmer ma commande</button>';
     formText += '</div></form></div>';
     formText += '<div class"modal-backdrop fade show" id="formbackdrop" style="display: none;"></div>';
     initForm.innerHTML = formText;
 }
 
+
 // On envoi les données au serveur 
 function sendForm(frm) {
-    var contact  = {
-        firstName : frm.elements['firstName'].value,
-        lastName : frm.elements['lastName'].value,
-        address : frm.elements['address'].value,
-        city : frm.elements['city'].value,
-        email : frm.elements['email'].value
-    };
-    let contact_id = [];
-        for (var i = 0; i < sessionStorage.length; i++) {
-            storageKey = sessionStorage.key(i);
-            storageJson = sessionStorage.getItem(storageKey);
-            obj = JSON.parse(storageJson);
-            contact_id.push(obj.id);
-        }
 
-    let bodyRequest = JSON.stringify({
-        "contact": contact, 
-        "products": contact_id
-    });
-    const request = new Request(
-        "https://oc-p5-api.herokuapp.com/api/teddies/order",
-        {
-        method: "POST",
-        body: bodyRequest,
-        headers: new Headers({
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        }),
+    // Fonction pour vérifier que prénom et nom est bien remplie
+    let verifFirstNameLastName = (texte) => {
+        let regexFirstNameLastName = /^[A-Za-zéèàêëç-\s]{2,50}$/;
+        if(regexFirstNameLastName.test(texte) == false) {
+            alert('Veuillez rentrer un nom ou prénom contenant au moins deux lettres et juste des lettres');
+            return false;
         }
+        else {
+            return texte;
+        }
+    }
+    // Fonction pour vérifier que l'adresse et la ville est bien remplie
+    let verifAddressCity = (texte) => {
+        let regexAdressCity = /^[A-Za-z0-9éèêëç-\s]{2,100}$/;
+        if(regexAdressCity.test(texte) == false) {
+            alert('Veuillez rentrer une adresse ou une ville contenant au moins deux caractères');
+            return false;
+        }
+        else {
+            return texte;
+        }
+    }
+    // Fonction pour vérifier que l'adresse mail ressemble bien a ours@ours.com
+    let verifEmail = (email) => {
+        let regexEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(regexEmail.test(email) == false) {
+            alert('Veuillez rentrer un email correct (de la forme ours@ours.com');
+            return false;
+        }
+        else {
+            return email;
+        } 
+    }
+    // On lance la vérification du formulaire, s'il est correcte on passe a la suite, sinon on ouvre un alert
+    if(verifEmail(frm.elements['email'].value) && verifFirstNameLastName(frm.elements['firstName'].value) && verifFirstNameLastName(frm.elements['lastName'].value) && verifAdressCity(frm.elements['city'].value) && verifAdressCity(frm.elements['address'].value)){
+        closeFormModal()
+        var contact  = {
+            firstName : frm.elements['firstName'].value,
+            lastName : frm.elements['lastName'].value,
+            address : frm.elements['address'].value,
+            city : frm.elements['city'].value,
+            email : frm.elements['email'].value
+        };
+        let contact_id = [];
+            for (var i = 0; i < sessionStorage.length; i++) {
+                storageKey = sessionStorage.key(i);
+                storageJson = sessionStorage.getItem(storageKey);
+                obj = JSON.parse(storageJson);
+                contact_id.push(obj.id);
+            }
+
+        let bodyRequest = JSON.stringify({
+            "contact": contact, 
+            "products": contact_id
+        });
+        const request = new Request(
+            "https://oc-p5-api.herokuapp.com/api/teddies/order",
+            {
+                method: "POST",
+                body: bodyRequest,
+                headers: new Headers({
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                }),
+            }
         );
         fetch(request)
         .then((response) => response.json())
@@ -180,7 +218,7 @@ function sendForm(frm) {
             let orderId = response.orderId;
             let totalprice = 0;
             for (var i = 0; i < products.length; i++) {
-                totalprice += products[i].price;
+                totalprice += products[i].price/100;
             }
             sessionStorage.clear();
             confirmAlert = document.getElementById('alert');
@@ -197,6 +235,7 @@ function sendForm(frm) {
             setTimeout("hiddenDivAlert()", 10000);
             checkBasket();
         });
+    }
 }
 
 
@@ -309,7 +348,7 @@ function loadCart(i) {
                 let initModalBodyDescr = document.getElementById('modal-bodyDescr');
                 let initModalBodyDescrText = '<img class="redimension" src="' + response.imageUrl + '"/>';
                 initModalBodyDescrText += '<p class="mx-auto col-12 text-center"> ' + response.description + ' </p>';
-                initModalBodyDescrText += '<p class="text-end">' + response.price + ' €</p>';
+                initModalBodyDescrText += '<p class="text-end">' + response.price/100 + ' €</p>';
                 initModalBodyDescrText += '<p class="ms-4"> Autres couleurs disponible : </p>';
                 // On crée un panel de couleur pour chaque ours suivant les couleurs prédifini dans l'api
                 initModalBodyDescrText += '<div class="ms-4 panelcouleurs row" id="panelco">';
