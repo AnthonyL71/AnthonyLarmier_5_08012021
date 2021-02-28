@@ -147,6 +147,13 @@ padding-right:100px;
 
 @media screen and (max-width: 600px)
 {
+    .redimension {
+        height:15rem;
+        object-fit:cover;
+        max-width:100%;
+        width:100%;
+        max-height:100%;
+    }
     .divalert {
         margin-top:9%;
     }
