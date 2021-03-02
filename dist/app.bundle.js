@@ -202,7 +202,7 @@ function sendForm(frm) {
             "products": contact_id
         });
         const request = new Request(
-            "https://oc-p5-api.herokuapp.com/api/teddies/order",
+            "http://localhost:3000/api/teddies/order",
             {
                 method: "POST",
                 body: bodyRequest,
@@ -316,7 +316,7 @@ function loadApi() {
             }
         };
     }
-request.open("GET", "https://oc-p5-api.herokuapp.com/api/teddies");
+request.open("GET", "http://localhost:3000/api/teddies");
 request.send();
 }
 
@@ -397,7 +397,7 @@ function loadCart(i) {
             };
         }
     }
-requests.open("GET", 'https://oc-p5-api.herokuapp.com/api/teddies/' + i + '');
+requests.open("GET", 'http://localhost:3000/api/teddies/' + i + '');
 requests.send();
 };
 
