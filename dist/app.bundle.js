@@ -180,7 +180,7 @@ let verifEmail = (email) => {
 // On envoi les données au serveur 
 function sendForm(frm) {
     // On lance la vérification du formulaire, s'il est correcte on passe a la suite, sinon on ouvre une alerte
-    if(verifEmail(frm.elements['email'].value) && verifFirstNameLastName(frm.elements['firstName'].value) && verifFirstNameLastName(frm.elements['lastName'].value) && verifAddressCity(frm.elements['city'].value) && verifAddressCity(frm.elements['address'].value)){
+    if(verifEmail(frm.elements['email'].value) && verifFirstNameLastName(frm.elements['firstName'].value) && verifFirstNameLastName(frm.elements['lastName'].value) && verifAddressCity(frm.elements['address'].value) && verifAddressCity(frm.elements['address'].value)){
         closeFormModal()
         var contact  = {
             firstName : frm.elements['firstName'].value,
