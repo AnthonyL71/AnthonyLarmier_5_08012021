@@ -135,7 +135,7 @@ function creatForm() {
     formText += '<input class="form-control mb-4" type="email" id="email" name="email">';
     formText += '</div><div class="col-12 text-center">';
     formText += '<button type="button" onclick="closeFormModal()" class="btn btn-secondary btn-md col-4 mb-2 me-3">Annuler</button>';
-    formText += '<button type="button" onclick="sendForm(this.form);" class="btn btn-primary btn-md col-4 mb-2">Confirmer ma commande</button>';
+    formText += '<button type="button" onclick="sendForm(this.form);" class="btn btn-primary btn-md col-4 mb-2">Confirmer</button>';
     formText += '</div></form></div>';
     formText += '<div class"modal-backdrop fade show" id="formbackdrop" style="display: none;"></div>';
     initForm.innerHTML = formText;
