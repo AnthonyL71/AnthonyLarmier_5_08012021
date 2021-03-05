@@ -61,6 +61,7 @@ padding-right:100px;
     width:180px;
     max-height:100%;
 }
+
 .t {
     margin-top: 50%!important;
     margin-bottom: 50%!important;
@@ -144,9 +145,11 @@ padding-right:100px;
 }
 
 
-
 @media screen and (max-width: 600px)
 {
+    .first-mobile {
+        display:none;
+    }
     .redimension {
         height:15rem;
         object-fit:cover;

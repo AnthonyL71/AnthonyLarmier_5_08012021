@@ -25,18 +25,23 @@ function addBasket(x) {
     if(keyExist === 1) {
         keyExistAlertText = '<div class="top-25 start-50 translate-middle alert alert-danger position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
         keyExistAlertText += 'Cette ours est déjà dans le panier !';
+        keyExistAlertText += '<br>';
+        keyExistAlertText += 'Va dans la panier pour modifier la quantité ;-)';
         keyExistAlertText += '</div>';
         delete(keyExist);
         setTimeout("hiddenDivAlert()", 3000);
     } else { // Sinon on l'ajoute
         for (let i = 0; i < tableOurs.length; i++) {
             if (x == i) {
+                var quantity = 1;
                 basketId = tableOurs[i]._id;
                 var monobjet  = {
                 id : tableOurs[i]._id,
                 name : tableOurs[i].name,
+                quantity : quantity,
                 image : tableOurs[i].imageUrl,
-                price : tableOurs[i].price/100
+                price : tableOurs[i].price/100,
+                total : tableOurs[i].price/100
                 };
                 keyExistAlertText = '<div class="top-25 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
                 keyExistAlertText += 'Ajout de ' + tableOurs[i].name + ' au panier !';
@@ -52,11 +57,71 @@ function addBasket(x) {
 keyExistAlert.innerHTML = keyExistAlertText;
 }
 
+// Fonction qui retire 1 a l'article du panier
+function quantitydown(x) {
+    for (var a = 0; a < sessionStorage.length; a++) {
+        storageKey = sessionStorage.key(a);
+        storageJson = sessionStorage.getItem(storageKey);
+        objet = JSON.parse(storageJson);
+        if(storageKey == x && objet.quantity > 1) {
+            for (let i = 0; i < tableOurs.length; i++) {
+                // On vérifie bien que ce soit la même clés
+                if (x == i) {
+                    // On recrée un objet avec la nouvelle quantité et le total changé
+                    var monobjet  = {
+                        id : tableOurs[i]._id,
+                        name : tableOurs[i].name,
+                        quantity : --objet.quantity,
+                        image : tableOurs[i].imageUrl,
+                        price : tableOurs[i].price/100,
+                        total : objet.total-tableOurs[i].price/100
+                    };
+                    // On efface de la sessionstorage l'ancien json pour remettre le nouveau a la place
+                    deleteBasket(x); 
+                    var monobjet_json = JSON.stringify(monobjet);
+                    sessionStorage.setItem(x,monobjet_json);
+                }
+            }
+        }
+    }
+}
+
+
+// Fonction qui ajoute 1 a l'article du panier
+function quantityup(x) {
+    for (var a = 0; a < sessionStorage.length; a++) {
+        storageKey = sessionStorage.key(a);
+        storageJson = sessionStorage.getItem(storageKey);
+        objet = JSON.parse(storageJson);
+        if(storageKey == x) {
+            for (let i = 0; i < tableOurs.length; i++) {
+                // On vérifie bien que ce soit la même clés
+                if (x == i) {
+                     // On recrée un objet avec la nouvelle quantité et le total changé
+                    var monobjet  = {
+                        id : tableOurs[i]._id,
+                        name : tableOurs[i].name,
+                        quantity : ++objet.quantity,
+                        image : tableOurs[i].imageUrl,
+                        price : tableOurs[i].price/100,
+                        total : tableOurs[i].price/100+objet.total
+                        };
+                    // On efface de la sessionstorage l'ancien json pour remettre le nouveau a la place
+                    deleteBasket(x); 
+                    var monobjet_json = JSON.stringify(monobjet);
+                    sessionStorage.setItem(x,monobjet_json);
+                }
+            }
+        }
+    }
+} 
+
 
 // Fonction qui affiche le panier
 function basket() {
     let storageKey;
-    let basketTotal = 0;
+    let basketPriceTotal = 0;
+    let basketQuantityTotal = 0;
     modalBasket = document.getElementById('basketmodal');
     let modalBasketText = '<div class="modal fade" aria-labelledby="label" id="basket-list" tabindex="-1" role="dialog" aria-hidden="true">';
     modalBasketText += '<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">';
@@ -65,38 +130,42 @@ function basket() {
     modalBasketText += '<h2 class="modal-title mx-auto col-12 text-center">Mon panier</h2>';
     modalBasketText += '<button type="button" onclick="closeBasketModal()" class="close position-absolute top-0 end-0 mt-2 me-2" data-dismiss="modal"><span>&times;</span></button>';
     modalBasketText += '</div>';
-    modalBasketText += '<div id="modal-body" class="modal-body">';
+    modalBasketText += '<div id="modal-body" class="modal-body col-12">';
     modalBasketText += '<div class="tableau">';
     modalBasketText += '<table id="myTable" class="tablesorter-bootstrap table" data-toggle="table">';
     modalBasketText += '<thead class="text-center text-white-50">';
     modalBasketText += '<tr>';
-    modalBasketText += '<th class="col-1"><h3>Retirer</h3></th>';
-    modalBasketText += '<th class="col-7"><h3>Photo</h3></th>';
-    modalBasketText += '<th class="col-2"><h3>Prénom</h3></th>';
-    modalBasketText += '<th class="col-2"><h3>Prix</h3></th>';
+    modalBasketText += '<th class="col-1"><h4>Retirer</h4></th>';
+    modalBasketText += '<th class="col-6"><h4>Photo</h4></th>';
+    modalBasketText += '<th class="col-1"><h4>Quantité</h4></th>';
+    modalBasketText += '<th class="col-2 first-mobile"><h4>Prénom</h4></th>';
+    modalBasketText += '<th class="col-2"><h4>Prix</h4></th>';
     modalBasketText += '</tr>';
     modalBasketText += '</thead>';
     modalBasketText += '</div>';
     modalBasketText += '</div>';
+    // On affiche les données qui sont dans la sessionstorage graçe a une boucle
     for (var i = 0; i < sessionStorage.length; i++) {
         storageKey = sessionStorage.key(i);
         storageJson = sessionStorage.getItem(storageKey);
         const obj = JSON.parse(storageJson);
         let id = i;
-        basketTotal += obj.price;
+        basketPriceTotal += obj.total;
+        basketQuantityTotal += obj.quantity;
         modalBasketText += '<tr class="text-white-50 text-center">';
-        modalBasketText += '<td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal()"><i class="fa fa-trash fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td><h3> ' + obj.name + '</h3></td><td><h3>  ' + obj.price + ' € </h3></td>';
+        modalBasketText += '<td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal(),checkBasket()"><i class="fa fa-trash fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td><button type="button" onclick="closeBasketModal(),quantitydown(' + storageKey + '),openBasketModal()" class="btn btn-secondary">-</button><h4> ' + obj.quantity + '</h4><button type="button" onclick="closeBasketModal(),quantityup(' + storageKey + '),openBasketModal()" class="btn btn-secondary">+</button></td><td style="padding-top:6%;" class="first-mobile"><h4> ' + obj.name + '</h4></td><td style="padding-top:6%;"><h4>' + obj.price + '€</h4></td>';
         modalBasketText += '</tr>';
-        }
+    }
     modalBasketText += '<tr class="text-white-50 text-center">';
-    modalBasketText += '<td /><td><h3>Total du panier:</h3></td><td /><td><h3> ' + basketTotal + ' €</h3></td>';
+    modalBasketText += '<td /><td><h4>Total du panier:</h4></td><td class="first-mobile"/><td /><td><h4> ' + basketPriceTotal + ' €</h4></td>';
     modalBasketText += '</tr>';
     modalBasketText += '</table>';
     modalBasketText += '<div class="modal-footer justify-content-center">';
     modalBasketText += '<button type="button" onclick="clearBasket(),closeBasketModal()"; class="btn btn-lg btn-secondary">Vider mon panier</button>';
+    // Si la sessionstorage retourne 0 alors on bloque le bouton "Confirmer mon panier"
     if (sessionStorage.length === 0) {
-    modalBasketText += '<button type="button" onclick="closeBasketModal(),openFormModal()"; class="btn btn-lg btn-primary mr-3" disabled>Confirmer mon panier</button>';
-    } else {
+        modalBasketText += '<button type="button" onclick="closeBasketModal(),openFormModal()"; class="btn btn-lg btn-primary mr-3" disabled>Confirmer mon panier</button>';
+    } else { // Si le sessionstorage retourne pas 0 alors on débloque le bouton "Confirmer mon panier"
         modalBasketText += '<button type="button" onclick="closeBasketModal(),openFormModal()"; class="btn btn-lg btn-primary mr-3">Confirmer mon panier</button>';
     }
     modalBasketText += '</div>';
@@ -127,7 +196,7 @@ function creatForm() {
     formText += '<input class="form-control mb-2" type="text" name="lastName">';
     formText += '<label for="address" class="mb-2">Adresse *</label>';
     formText += '<input class="form-control mb-2" type="text" name="address">';
-    formText += '<label for="code" class="mb-2">Code Postal</label>';
+    formText += '<label for="code" class="mb-2">Code Postal *</label>';
     formText += '<input class="form-control mb-2" type="text" name="code">';
     formText += '<label for="city" class="mb-2">Ville *</label>';
     formText += '<input class="form-control mb-2" type="text" name="city">';
@@ -143,14 +212,34 @@ function creatForm() {
 
 // Fonction pour vérifier que prénom et nom est bien remplie
 let verifFirstNameLastName = (texte) => {
-    let regexFirstNameLastName = /^[A-Za-zéèàêëç-\s]{2,50}$/;
-    if(regexFirstNameLastName.test(texte) == false) {
-        alert('Veuillez rentrer un nom ou prénom contenant au moins deux lettres et juste des lettres');
-        return false;
-    }
-    else {
-        return texte;
-    }
+    // On lance une promesse vous vérifier si le texte est conforme au regex
+    return new Promise((resolve, reject) => {
+        let regexFirstNameLastName = /^[A-Za-zéèàêëç-\s]{2,50}$/;
+        if(regexFirstNameLastName.test(texte) == false) {
+            // Il y a une erreur donc on retourne du texte dans reject qu'on lira dans le catch
+            reject('Veuillez rentrer un nom ou prénom contenant au moins deux lettres et juste des lettres');
+            return false;
+        } else {
+            resolve(texte);
+            return true;
+        }
+    });
+}
+
+// Fonction pour vérifier que prénom et nom est bien remplie
+let verifPost = (texte) => {
+    return new Promise((resolve, reject) => {
+        let regexPost = /^[0-9]{4,6}$/;
+        if(regexPost.test(texte) == false) {
+            // Il y a une erreur donc on retourne du texte dans reject qu'on lira dans le catch
+            reject('Veuillez rentrer un code postal contenant au moins quatre chiffres et juste des chiffres');
+            return false;
+        }
+        else {
+            resolve(texte);
+            return texte;
+        }
+    });
 }
 
 // Fonction pour vérifier que l'adresse et la ville est bien remplie
@@ -159,8 +248,7 @@ let verifAddressCity = (texte) => {
     if(regexAdressCity.test(texte) == false) {
         alert('Veuillez rentrer une adresse ou une ville contenant au moins deux caractères');
         return false;
-    }
-    else {
+    } else {
         return texte;
     }
 }
@@ -171,72 +259,89 @@ let verifEmail = (email) => {
     if(regexEmail.test(email) == false) {
         alert('Veuillez rentrer un email correct (de la forme ours@ours.com');
         return false;
-    }
-    else {
+    } else {
         return email;
     } 
 }
 
 // On envoi les données au serveur 
 function sendForm(frm) {
-    // On lance la vérification du formulaire, s'il est correcte on passe a la suite, sinon on ouvre une alerte
-    if(verifEmail(frm.elements['email'].value) && verifFirstNameLastName(frm.elements['firstName'].value) && verifFirstNameLastName(frm.elements['lastName'].value) && verifAddressCity(frm.elements['address'].value) && verifAddressCity(frm.elements['city'].value)){
-        closeFormModal()
-        var contact  = {
-            firstName : frm.elements['firstName'].value,
-            lastName : frm.elements['lastName'].value,
-            address : frm.elements['address'].value,
-            city : frm.elements['city'].value,
-            email : frm.elements['email'].value
-        };
-        let contact_id = [];
-            for (var i = 0; i < sessionStorage.length; i++) {
-                storageKey = sessionStorage.key(i);
-                storageJson = sessionStorage.getItem(storageKey);
-                obj = JSON.parse(storageJson);
-                contact_id.push(obj.id);
-            }
-
-        let bodyRequest = JSON.stringify({
-            "contact": contact, 
-            "products": contact_id
-        });
-        const request = new Request(
-            "http://localhost:3000/api/teddies/order",
-            {
-                method: "POST",
-                body: bodyRequest,
-                headers: new Headers({
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                }),
-            }
-        );
-        fetch(request)
-        .then((response) => response.json())
-        .then((response) => {
-            let products = response.products;
-            let orderId = response.orderId;
-            let totalprice = 0;
-            for (var i = 0; i < products.length; i++) {
-                totalprice += products[i].price/100;
-            }
-            sessionStorage.clear();
-            confirmAlert = document.getElementById('alert');
-            confirmAlertText = '<div class="top-50 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
-            confirmAlertText += '<h3>Commande validé. Bravo !<h3>';
-            confirmAlertText += '<br />';
-            confirmAlertText += '<h3>Merci pour la commande ' + response.contact.firstName + ' ! Note bien ton numéro de commande ci dessous.';
-            confirmAlertText += '<br /><br />';
-            confirmAlertText += '<h3>Commande numéro: ' + orderId + '<h3>';
-            confirmAlertText += '<br />';
-            confirmAlertText += '<h3>Pour un prix total de ' + totalprice + ' €<h3>';
-            confirmAlertText += '</div>';
-            confirmAlert.innerHTML = confirmAlertText;
-            setTimeout("hiddenDivAlert()", 10000);
-            checkBasket();
-        });
-    }
+    // On appelle la fonction pour vérifier le prénom avec une promesse
+    if (verifFirstNameLastName(frm.elements['firstName'].value) .then((output) => {
+        // On appelle la fonction pour vérifier le nom avec une promesse
+        if (verifFirstNameLastName(frm.elements['lastName'].value) .then((output) => {
+            // On appelle la fonction pour vérifier le nom avec une promesse
+            if (verifPost(frm.elements['code'].value) .then((output) => {
+                // On lance la vérification du formulaire, s'il est correcte on passe a la suite, sinon on ouvre une alerte
+                if(verifEmail(frm.elements['email'].value) && verifAddressCity(frm.elements['address'].value) && verifAddressCity(frm.elements['city'].value)){
+                    closeFormModal()
+                    let totalBasket = 0;
+                    var contact  = {
+                        firstName : frm.elements['firstName'].value,
+                        lastName : frm.elements['lastName'].value,
+                        address : frm.elements['address'].value,
+                        city : frm.elements['city'].value,
+                        email : frm.elements['email'].value
+                    };
+                    let contact_id = [];
+                    for (var i = 0; i < sessionStorage.length; i++) {
+                        storageKey = sessionStorage.key(i);
+                        storageJson = sessionStorage.getItem(storageKey);
+                        obj = JSON.parse(storageJson);
+                        totalBasket += obj.total;
+                        contact_id.push(obj.id);
+                    }
+                    let bodyRequest = JSON.stringify({
+                        "contact": contact, 
+                        "products": contact_id
+                    });
+                    const request = new Request(
+                        "http://localhost:3000/api/teddies/order",
+                        {
+                            method: "POST",
+                            body: bodyRequest,
+                            headers: new Headers({
+                                Accept: "application/json",
+                                "Content-Type": "application/json",
+                            }),
+                        }
+                    );
+                    fetch(request)
+                    .then((response) => response.json())
+                    .then((response) => {
+                        let products = response.products;
+                        let orderId = response.orderId;
+                        sessionStorage.clear();
+                        confirmAlert = document.getElementById('alert');
+                        confirmAlertText = '<div class="top-50 start-50 translate-middle alert alert-success position-fixed text-center" id="show-alert" style="visibility: visible" role="alert">';
+                        confirmAlertText += '<h3>Commande validé. Bravo !<h3>';
+                        confirmAlertText += '<br />';
+                        confirmAlertText += '<h3>Merci pour la commande ' + response.contact.firstName + ' ! Note bien ton numéro de commande ci dessous.';
+                        confirmAlertText += '<br /><br />';
+                        confirmAlertText += '<h3>Commande numéro: ' + orderId + '<h3>';
+                        confirmAlertText += '<br />';
+                        confirmAlertText += '<h3>Pour un prix total de ' + totalBasket + ' €<h3>';
+                        confirmAlertText += '</div>';
+                        confirmAlert.innerHTML = confirmAlertText;
+                        setTimeout("hiddenDivAlert()", 10000);
+                        checkBasket();
+                    });
+                }
+            })
+            // Si la promesse pour le code postale retourne une erreur on l'affiche dans alert
+            .catch((err) => {
+                alert(err);
+            }));
+        })
+        // Si la promesse pour prénom retourne une erreur on l'affiche dans alert
+        .catch((err) => {
+            alert(err);
+        }));
+    })
+    // Si la promesse pour le nom retourne une erreur on l'affiche dans alert
+    .catch((err) => {
+    alert(err);
+    }));
 }
 
 
@@ -268,8 +373,13 @@ function deleteBasket(i) {
 
 // On vérifie s'il y a des entrées dans le panier, et on affiche le nombre dans sur le bouton panier
 function checkBasket() {
-    let numberKey;
-    numberKey = sessionStorage.length;
+    let numberKey = 0;
+    for (var a = 0; a < sessionStorage.length; a++) {
+        storageKey = sessionStorage.key(a);
+        storageJson = sessionStorage.getItem(storageKey);
+        objet = JSON.parse(storageJson);
+        numberKey += objet.quantity;
+    }
     let initBadge = document.getElementById('badge');
     let badgeText = '<span class="red mr-4">'+ numberKey + '</span>';
     initBadge.innerHTML = badgeText;
@@ -401,8 +511,10 @@ requests.open("GET", 'http://localhost:3000/api/teddies/' + i + '');
 requests.send();
 };
 
-
+// On check le panier au lancement du site pour voir la quantité qu'il y a
 checkBasket();
+
+// On lance loadApi pour charger l'api et afficher les Ours
 loadApi();
 
 // Fonction qui ouvre la modal de description de l'article
@@ -427,6 +539,7 @@ function openBasketModal() {
     document.getElementById('basket-list').className += "show"
     document.getElementById('basketbackdrop').style.display = "block"
 }
+
 // Fonction qui ferme la modal du panier
 function closeBasketModal() {
     document.getElementById('basketbackdrop').style.display = "none"
@@ -442,6 +555,7 @@ function openFormModal() {
     document.getElementById('form-list').className += "show"
     document.getElementById('formbackdrop').style.display = "block"
 }
+
 // Fonction qui ferme le formulaire
 function closeFormModal() {
     document.getElementById('formbackdrop').style.display = "none"
