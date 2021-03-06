@@ -462,43 +462,44 @@ function loadCart(i) {
                 initModalBodyDescrText += '<p class="text-end">' + response.price/100 + ' €</p>';
                 initModalBodyDescrText += '<p class="ms-4"> Autres couleurs disponible : </p>';
                 // On crée un panel de couleur pour chaque ours suivant les couleurs prédifini dans l'api
-                initModalBodyDescrText += '<div class="ms-4 panelcouleurs row" id="panelco">';
+                initModalBodyDescrText += '<select class="row form-control ms-1">';
                 for (let d = 0; d < colorsOurs.length; d++) {
                     switch (colorsOurs[d]) {
                         case 'Tan':
-                            initModalBodyDescrText += '<div id="square-tan" class="square-tan"></div>';
+                            initModalBodyDescrText += '<option value="tan" class="col-10 text-center">Tan</option>';
                             break;
                         case "Chocolate":
-                            initModalBodyDescrText += '<div id="square-chocolate" class="square-chocolate"></div>';
+                            initModalBodyDescrText += '<option value="chocolate" class="col-10 text-center">Chocolate</option>';
                             break;
                         case "Black":
-                            initModalBodyDescrText += '<div id="square-black" class="square-black"></div>';
+                            initModalBodyDescrText += '<option value="black" class="col-10 text-center">Black</option>';
                             break;
                         case "White":
-                            initModalBodyDescrText += '<div id="square-white" class="square-white"></div>';
+                            initModalBodyDescrText += '<option value="white" class="col-10 text-center">White</option>';
                             break;
                         case "Pale brown":
-                            initModalBodyDescrText += '<div id="square-paleborwn" class="square-palebrown"></div>';
+                            initModalBodyDescrText += '<option value="palebrown" class="col-10 text-center">Pale Brown</option>';
                             break;
                         case "Dark brown":
-                            initModalBodyDescrText += '<div id="square-darkbrown" class="square-darkbrown"></div>';
+                            initModalBodyDescrText += '<option value="darkbrown" class="col-10 text-center">Dark Brown</option>';
                             break;
                         case "Brown":
-                            initModalBodyDescrText += '<div id="square-brown" class="square-brown"></div>';
+                            initModalBodyDescrText += '<option value="brown" class="col-10 text-center">Brown</option>';
                             break;
                         case "Blue":
-                            initModalBodyDescrText += '<div id="square-blue" class="square-blue"></div>';
+                            initModalBodyDescrText += '<option value="blue" class="col-10 text-center">Blue</option>';
                             break;
                         case "Pink":
-                            initModalBodyDescrText += '<div id="square-pink" class="square-pink"></div>';
+                            initModalBodyDescrText += '<option value="pink" class="col-10 text-center">Pink</option>';
                             break;
                         case "Beige":
-                            initModalBodyDescrText += '<div id="square-beige" class="square-beige"></div>';
+                            initModalBodyDescrText += '<option value="beige" class="col-10 text-center">Beige</option>';
                             break;
                         default:
-                            initModalBodyDescrText += '<p>Aucunes couleurs disponibles</p>';
+                            initModalBodyDescrText += '<option value="vide" class="col-10 text-center">Aucune couleur disponible</option>';
                     }
                 }
+                initModalBodyDescrText += '</select>';
                 initModalBodyDescr.innerHTML = initModalBodyDescrText;
                 let initModalFooterDescr = document.getElementById('modal-footerDescr');
                 let initModalFooterDescrText = '<button type="button" id="modal-close" onclick="closeModalDescr()"; class="btn btn-secondary mr-3" data-dismiss="modal">Retour en arrière</button>';
