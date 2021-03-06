@@ -153,7 +153,7 @@ function basket() {
         basketPriceTotal += obj.total;
         basketQuantityTotal += obj.quantity;
         modalBasketText += '<tr class="text-white-50 text-center">';
-        modalBasketText += '<td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal(),checkBasket()"><i class="fa fa-trash fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td><button type="button" onclick="closeBasketModal(),quantitydown(' + storageKey + '),openBasketModal()" class="btn btn-secondary">-</button><h4> ' + obj.quantity + '</h4><button type="button" onclick="closeBasketModal(),quantityup(' + storageKey + '),openBasketModal()" class="btn btn-secondary">+</button></td><td style="padding-top:6%;" class="first-mobile"><h4> ' + obj.name + '</h4></td><td style="padding-top:6%;"><h4>' + obj.price + '€</h4></td>';
+        modalBasketText += '<td style="padding-top:6%;"><a onclick="closeBasketModal(),deleteBasket(' + storageKey + '),openBasketModal(),checkBasket()"><i class="fa fa-trash fa-2x"></i></a></td><td><img class="redimension-basket mx-auto" src="' + obj.image + '"/></td><td><button type="button" onclick="closeBasketModal(),quantitydown(' + storageKey + '),openBasketModal()" class="btn btn-secondary">-</button><h4> ' + obj.quantity + '</h4><button type="button" onclick="closeBasketModal(),quantityup(' + storageKey + '),openBasketModal()" class="btn btn-secondary">+</button></td><td style="padding-top:6%;" class="first-mobile"><h4> ' + obj.name + '</h4></td><td style="padding-top:6%;"><h4>' + obj.total + '€</h4></td>';
         modalBasketText += '</tr>';
     }
     modalBasketText += '<tr class="text-white-50 text-center">';
