@@ -460,7 +460,7 @@ function loadCart(i) {
                 let initModalBodyDescrText = '<img class="redimension" src="' + response.imageUrl + '"/>';
                 initModalBodyDescrText += '<p class="mx-auto col-12 text-center"> ' + response.description + ' </p>';
                 initModalBodyDescrText += '<p class="text-end">' + response.price/100 + ' €</p>';
-                initModalBodyDescrText += '<p class="ms-4"> Autres couleurs disponible : </p>';
+                initModalBodyDescrText += '<p class="ms-4"> Couleurs disponible : </p>';
                 // On crée un panel de couleur pour chaque ours suivant les couleurs prédifini dans l'api
                 initModalBodyDescrText += '<select class="row form-control ms-1">';
                 for (let d = 0; d < colorsOurs.length; d++) {
